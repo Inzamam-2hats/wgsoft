@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="https://symfony.com/schema/dic/services
+                https://symfony.com/schema/dic/services/services-1.0.xsd
+                http://symfony.com/schema/dic/monolog
+                https://symfony.com/schema/dic/monolog/monolog-1.0.xsd">
+    <services>
+        <defaults public="true"/>
+
+        <service id="Fishn\GpsrPlugShopware6\Subscriber\ManufacturerCacheSubscriber" public="true">
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer" />
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+    </services>
+</container>

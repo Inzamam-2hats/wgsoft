@@ -1,0 +1,48 @@
+/*
+Bootstrap variables
+==================================================
+Contains all overrides of bootstrap default variables.
+
+https://getbootstrap.com/docs/4.3/getting-started/theming/#variable-defaults
+*/
+.ch-mobile-wrapper {
+  display: flex;
+  background-color: #4C545F;
+  color: #fff;
+}
+.ch-mobile-wrapper .container .ch-item {
+  padding: 10px 0;
+  text-align: center;
+}
+
+.ch-desktop-wrapper {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .ch-mobile-wrapper {
+    display: none;
+  }
+
+  .ch-desktop-wrapper {
+    display: flex;
+    background-color: #4C545F;
+    color: #fff;
+    height: 20px;
+    padding: 20px 0;
+  }
+  .ch-desktop-wrapper .container .ch-item {
+    padding: 10px 0;
+    text-align: center;
+  }
+  .ch-desktop-wrapper .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ch-desktop-wrapper .container .ch-item {
+    padding: 0;
+  }
+}
+
+/*# sourceMappingURL=main.css.map */

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Settings for the product detail page</title>
+        <title lang="de-DE">Einstellungen für die Produkt - Detailseite</title>
+
+        <input-field type="bool">
+            <name>customerInputNoteProductDetailPage</name>
+            <label>if a customer adds a product to the shopping cart again for the same order, regardless of whether it is a product with variants or a single product, the standard behavior of Shopware 6 is still triggered. This means that the quantity of the product is increased by the selected value. Since it is still the same product, the customer's previous input is overwritten in this case, because it is a custom field in the order line item and not a independent order line item. This implementation was chosen, among other reasons, because most ERP systems, including Shopware 6, would encounter problems with "resetting" stocks, for example, in the case of cancellations, if the same product is present multiple times in the shopping cart under different order line items.</label>
+            <label lang="de-DE">wenn ein Kunde ein Produkt, egal ob es sich um ein Produkt mit Varianten handelt oder ein Einzelprodukt, bei der gleichen Bestellung erneut in den Warenkorb legt, wird weiterhin das Standardverhalten von Shopware 6 ausgelöst. Es erhöht sich also die Menge des Produkts um den ausgewählten Wert. Da es sich weiterhin um das gleiche Produkt handelt, wird in diesem Fall die bereits vorgenommene Kundeneingabe überschrieben, da es sich um ein Zusatzfeld an einer Bestellposition handelt und nicht um eine eigenständige Bestellposition. Diese Umsetzungsvariante wurde unter anderem deshalb gewählt, da die meisten Warenwirtschaftssysteme als auch Shopware 6 beispielsweise bei Stornierungen, was das "Zurücksetzen" von Beständen angeht, auf Probleme stoßen würden, wenn das gleiche Produkt mehrfach unter verschiedenen Bestellpositionen im Warenkorb vorhanden ist.</label>
+            <disabled>true</disabled>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputShowOnProductDetailPage</name>
+            <label>show customer input</label>
+            <label lang="de-DE">Kundeneingabe anzeigen</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputShowInformationMessage</name>
+            <label>show information message under customer inputs</label>
+            <label lang="de-DE">Hinweismeldung unter den Kundeneingaben anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <component name="sw-snippet-field">
+            <name>customerInputInformationMessageSnippet</name>
+            <label>text of the information message</label>
+            <label lang="de-DE">Text der Hinweismeldung</label>
+            <snippet>tmms.customerInput.informationMessage</snippet>
+            <helpText>click on the globe to edit the translations</helpText>
+            <helpText lang="de-DE">Klicke auf den Globus, um die Übersetzung zu bearbeiten</helpText>
+        </component>
+    </card>
+
+    <card>
+        <title>Settings for the checkout</title>
+        <title lang="de-DE">Einstellungen für den Checkout</title>
+
+        <input-field type="bool">
+            <name>customerInputIsInAnAccordionInCheckout</name>
+            <label>show in the shopping cart and on the confirm page in an accordion area</label>
+            <label lang="de-DE">im Warenkorb und auf der Bestellabschlussseite in einem Akkordeon-Bereich anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <component name="sw-snippet-field">
+            <name>customerInputHeadlineAccordionAreaSnippet</name>
+            <label>text of the headline of the accordion area</label>
+            <label lang="de-DE">Text der Überschrift des Akkordeon-Bereichs</label>
+            <snippet>tmms.customerInput.accordionHeadingLabel</snippet>
+            <helpText>click on the globe to edit the translations</helpText>
+            <helpText lang="de-DE">Klicke auf den Globus, um die Übersetzung zu bearbeiten</helpText>
+        </component>
+
+        <input-field type="bool">
+            <name>customerInputShowDividingLineCheckout</name>
+            <label>show dividing line between product and customer input</label>
+            <label lang="de-DE">Trennlinie zwischen dem Produkt und der Kundeneingabe anzeigen</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputShowOnOffcanvasCartPage</name>
+            <label>show customer input on offcanvas cart page</label>
+            <label lang="de-DE">Kundeneingabe im OffCanvas-Warenkorb anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputShowOnCartPage</name>
+            <label>show customer input on cart page</label>
+            <label lang="de-DE">Kundeneingabe im Warenkorb anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputShowOnConfirmPage</name>
+            <label>show customer input on confirm page</label>
+            <label lang="de-DE">Kundeneingabe auf der Bestellabschlussseite anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputShowEmptyFieldInCheckout</name>
+            <label>show empty customer input field</label>
+            <label lang="de-DE">leere Kundeneingabe anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputCanChangedInCheckout</name>
+            <label>customer input can be changed</label>
+            <label lang="de-DE">Kundeneingabe ist änderbar</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Settings for the customer account</title>
+        <title lang="de-DE">Einstellungen für das Kundenkonto</title>
+
+        <input-field type="bool">
+            <name>showRepeatOrderButton</name>
+            <label>show "repeat order" button</label>
+            <label lang="de-DE">Schaltfläche "Bestellung wiederholen" anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>takeOverCustomerInput</name>
+            <label>when repeating an order, take over the customer inputs</label>
+            <label lang="de-DE">bei dem Wiederholen einer Bestellung die Kundeneingaben übernehmen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Settings for the date and time field</title>
+        <title lang="de-DE">Einstellungen für das Datums- und Uhrzeitfeld</title>
+
+        <input-field type="bool">
+            <name>customerInputCalendarBasedOnLocalization</name>
+            <label>use language-dependent calendar based on localization</label>
+            <label lang="de-DE">sprachabhängigen Kalender anhand der Lokalisierung verwenden</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>customerInputDateFormat</name>
+            <label>date format</label>
+            <label lang="de-DE">Datumsformat</label>
+            <options>
+                <option>
+                    <id>d.m.Y</id>
+                    <name>d.m.Y (01.01.2021)</name>
+                    <name lang="de-DE">d.m.Y (01.01.2021)</name>
+                </option>
+                <option>
+                    <id>Y-m-d</id>
+                    <name>Y-m-d (2021-01-01)</name>
+                    <name lang="de-DE">Y-m-d (2021-01-01)</name>
+                </option>
+            </options>
+            <defaultValue>d.m.Y</defaultValue>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>customerInputDateTimeFormat</name>
+            <label>date and time format</label>
+            <label lang="de-DE">Datums- und Uhrzeitformat</label>
+            <options>
+                <option>
+                    <id>d.m.Y H:i</id>
+                    <name>d.m.Y H:i (01.01.2021 14:00)</name>
+                    <name lang="de-DE">d.m.Y H:i (01.01.2021 14:00)</name>
+                </option>
+                <option>
+                    <id>Y-m-d H:i</id>
+                    <name>Y-m-d H:i (2021-01-01 14:00)</name>
+                    <name lang="de-DE">Y-m-d H:i (2021-01-01 14:00)</name>
+                </option>
+            </options>
+            <defaultValue>d.m.Y H:i</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputAllowManualInput</name>
+            <label>Allow manual input in the field</label>
+            <label lang="de-DE">manuelle Eingabe in das Feld erlauben</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputShowWeeksNumbers</name>
+            <label>Show weeks numbers</label>
+            <label lang="de-DE">Kalenderwochen anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputSetStartDateAsDefaultValue</name>
+            <label>Set the start date or time as the default value</label>
+            <label lang="de-DE">Startdatum oder -Uhrzeit als Standardwert setzen</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Settings for the required field</title>
+        <title lang="de-DE">Einstellungen für das Pflichtfeld</title>
+
+        <component name="sw-snippet-field">
+            <name>customerInputTextRequiredFieldSnippet</name>
+            <label>text of the required field</label>
+            <label lang="de-DE">Text der Pflichtfeldmarkierung</label>
+            <snippet>tmms.customerInput.requiredLabel</snippet>
+            <helpText>click on the globe to edit the translations</helpText>
+            <helpText lang="de-DE">Klicke auf den Globus, um die Übersetzung zu bearbeiten</helpText>
+        </component>
+
+        <input-field type="bool">
+            <name>customerInputRequiredFieldCanChangedInCart</name>
+            <label>required fields can be changed in the shopping cart (however, it is not possible to intercept the sending of the form)</label>
+            <label lang="de-DE">Pflichtfelder sind im Warenkorb änderbar (das Abfangen des Absendens des Formulars ist aber nicht möglich)</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputRequiredFieldCanChangedOnConfirmPage</name>
+            <label>required fields can be changed on the confirm page</label>
+            <label lang="de-DE">Pflichtfelder sind auf der Bestellabschlussseite änderbar</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputEmptyRequiredFieldAreSavedInCheckout</name>
+            <label>empty required fields are saved in the checkout</label>
+            <label lang="de-DE">leere Pflichtfelder werden im Checkout gespeichert</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputHighlightRequiredFieldInColor</name>
+            <label>highlight the required field in color</label>
+            <label lang="de-DE">Pflichtfeldmarkierung farblich hervorheben</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Additional Settings</title>
+        <title lang="de-DE">Weitere Einstellungen</title>
+
+        <input-field type="bool">
+            <name>customerInputShowDetailsButtonInNavigation</name>
+            <label>show details button in navigation when customer input has been activated for the product</label>
+            <label lang="de-DE">Details-Schaltfläche in den Kategorienlisten anzeigen, wenn die Kundeneingabe bei einem Produkt aktiviert wurde</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputShowinQuickview</name>
+            <label>show customer input in the quickview from shopware</label>
+            <label lang="de-DE">Kundeneingabe in der Quickview von Shopware anzeigen</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>customerInputNumberRowsTextarea</name>
+            <label>number of rows for the multi-line input field</label>
+            <label lang="de-DE">Anzahl an Zeilen für das mehrzeilige Eingabefeld</label>
+            <defaultValue>4</defaultValue>
+            <placeholder>4</placeholder>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputBlockEnterKeyForInputTypeText</name>
+            <label>block the enter key for the field types single-line input field, number field, date and time field, date field and time field</label>
+            <label lang="de-DE">Eingabetaste bei den Feldtypen einzeiliges Eingabefeld, Nummernfeld, Datums- und Uhrzeitfeld, Datumsfeld und Uhrzeitfeld blockieren</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerInputTransferUnselectedCheckboxFieldsAsValue</name>
+            <label>transfer unselected checkbox fields as a value</label>
+            <label lang="de-DE">nicht ausgewählte Checkboxfelder als Wert übertragen</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+    </card>
+</config>

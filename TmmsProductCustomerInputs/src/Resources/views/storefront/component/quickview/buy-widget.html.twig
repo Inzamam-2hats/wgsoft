@@ -1,0 +1,82 @@
+{% sw_extends '@SwagCmsExtensions/storefront/component/quickview/buy-widget.html.twig' %}
+
+{% block page_product_detail_configurator_include %}
+    {{ parent() }}
+
+    {% set tmmsRequiredFieldIsPossible = 0 %}
+
+    {% block page_product_detail_configurator_include_quickview_customerinput %}
+        {% set extension = page.product.extensions %}
+        {% set tmmsCustomerInputCountValue = extension['tmmsCustomerInputCountValue'].value %}
+        {% set tmmsCustomerInputActiveValues = 0 %}
+
+        {% for tmmsCustomerInputCount in 1..tmmsCustomerInputCountValue %}
+            {% set productId = page.product.id %}
+            {% set productNumber = page.product.productNumber %}
+
+            {% set tmmsCustomerInputValue = extension['tmmsCustomerInput' ~ tmmsCustomerInputCount].value %}
+
+            {% set requiredFormName = 'productDetailPageBuyProductForm' %}
+
+            {% set customFields = page.product.translated.customFields %}
+            {% set tmmsCustomerInputActive = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_active' %}
+            {% set tmmsCustomerInputFieldtype = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_fieldtype' %}
+            {% set tmmsCustomerInputTitle = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_title' %}
+            {% set tmmsCustomerInputPlaceholder = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_placeholder' %}
+            {% set tmmsCustomerInputRequired = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_required' %}
+            {% set tmmsCustomerInputMinvalue = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_minvalue' %}
+            {% set tmmsCustomerInputMaxvalue = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_maxvalue' %}
+            {% set tmmsCustomerInputStepvalue = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_stepsvalue' %}
+            {% set tmmsCustomerInputStartdate = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_startdate' %}
+            {% set tmmsCustomerInputEnddate = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_enddate' %}
+            {% set tmmsCustomerInputDisableddates = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_disableddates' %}
+            {% set tmmsCustomerInputStarttime = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_starttime' %}
+            {% set tmmsCustomerInputEndtime = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_endtime' %}
+            {% set tmmsCustomerInputDaterange = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_daterange' %}
+            {% set tmmsCustomerInputSelectfieldvalues = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_selectfieldvalues' %}
+
+            {% if customFields[tmmsCustomerInputActive] and config('TmmsProductCustomerInputs.config.customerInputShowinQuickview') and ((customFields[tmmsCustomerInputFieldtype] == "select" and customFields[tmmsCustomerInputSelectfieldvalues]) or (customFields[tmmsCustomerInputFieldtype] != "select")) %}
+                <form id="productCustomerInputForm-{{ productId }}-{{ tmmsCustomerInputCount }}" class="tmms-customer-input-detail-box-form{% if config('TmmsProductCustomerInputs.config.customerInputHighlightRequiredFieldInColor') and (customFields[tmmsCustomerInputRequired]) %} was-validated{% endif %}" action="{{ path('frontend.savecustomerinputs.request') }}" method="post">
+                    {% if customFields[tmmsCustomerInputFieldtype] == "input" or customFields[tmmsCustomerInputFieldtype] == "textarea" or customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date" or customFields[tmmsCustomerInputFieldtype] == "time" or customFields[tmmsCustomerInputFieldtype] == "select" %}<label for="tmms-customer-input-value-{{ productId }}-{{ tmmsCustomerInputCount }}">{% elseif customFields[tmmsCustomerInputFieldtype] == "boolean" %}<div>{% endif %}
+                        {% if customFields[tmmsCustomerInputTitle] %}
+                            {{ customFields[tmmsCustomerInputTitle] }}
+                        {% else %}
+                            {{ "tmms.customerInput.titleLabel"|trans|raw }}
+                        {% endif %}
+                    {% if customFields[tmmsCustomerInputFieldtype] == "input" or customFields[tmmsCustomerInputFieldtype] == "textarea" or customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date" or customFields[tmmsCustomerInputFieldtype] == "time" or customFields[tmmsCustomerInputFieldtype] == "select" %}</label>{% elseif customFields[tmmsCustomerInputFieldtype] == "boolean" %}</div>{% endif %}
+
+                    <div class="{% if customFields[tmmsCustomerInputFieldtype] == "input" or customFields[tmmsCustomerInputFieldtype] == "textarea" or customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date" or customFields[tmmsCustomerInputFieldtype] == "time" or customFields[tmmsCustomerInputFieldtype] == "select" %}input-group{% elseif customFields[tmmsCustomerInputFieldtype] == "boolean" %}form-check{% endif %}">
+                        {% sw_include '@TmmsProductCustomerInputs/storefront/component/buy-widget/buy-widget-customer-input-fields.html.twig' with {
+                            prefix: ""
+                        } %}
+                    </div>
+                    {% if customFields[tmmsCustomerInputRequired] %}
+                        <small class="form-text required-text{% if customFields[tmmsCustomerInputFieldtype] == "boolean" %} is-checkbox{% endif %}">
+                            {{ "tmms.customerInput.requiredLabel"|trans|raw }}
+                        </small>
+                        <br/>
+                    {% endif %}
+                </form>
+            {% endif %}
+
+            {% if customFields[tmmsCustomerInputActive] %}
+                {% set tmmsCustomerInputActiveValues = tmmsCustomerInputActiveValues + 1 %}
+            {% endif %}
+        {% endfor %}
+
+        {% if (config('TmmsProductCustomerInputs.config.customerInputShowInformationMessage')) and (tmmsCustomerInputActiveValues > 0) %}
+            {% block page_product_detail_configurator_include_quickview_customerinput_informationmessage %}
+                <div role="alert"
+                     class="alert alert-info alert-has-icon tmms-customer-input-alert-info">
+                    {% sw_icon 'info' %}
+
+                    <div class="alert-content-container">
+                        <div class="alert-content">
+                            {{ "tmms.customerInput.informationMessage"|trans|raw }}
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        {% endif %}
+    {% endblock %}
+{% endblock %}

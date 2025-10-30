@@ -1,0 +1,23 @@
+{
+  "lws-esd-serials": {
+    "serialNumber": "Seriennummer",
+    "serials-listing": {
+      "cardTitle": "Seriennummern",
+      "addButtonLabel": "Hinzufügen",
+      "detailOpenButtonLabel": "Öffnen",
+      "titleEmptyLayerList": "Noch keine Seriennummern vorhanden.",
+      "serialNumber":  "Seriennummer",
+      "assignDate": "Zuweisungsdatum",
+      "detailOrder": "Bestellung öffnen"
+    },
+    "serials-detail": {
+      "title": "Seriennummer",
+      "cardTitle": "Seriennummer",
+      "labelSerial": "Seriennummer",
+      "successMessage": "Erfolgreich gespeichert.",
+      "notificationSaveErrorMessageRequiredFieldsInvalid": "Eingabe nicht korrekt.",
+      "cancel": "Abbrechen",
+      "save": "Speichern"
+    }
+  }
+}

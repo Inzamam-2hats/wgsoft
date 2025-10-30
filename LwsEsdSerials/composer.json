@@ -1,0 +1,41 @@
+{
+  "name": "lws/esd-serials",
+  "description": "Seriennummern",
+  "type": "shopware-platform-plugin",
+  "license": "proprietary",
+  "version": "2.1.0",
+  "authors": [
+    {
+      "name": "Bergisch eCommerce GmbH",
+      "role": "Manufacturer"
+    }
+  ],
+  "require": {
+    "shopware/core": "6.6.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "LwsEsdSerials\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "LwsEsdSerials\\LwsEsdSerials",
+    "label": {
+      "de-DE": "Seriennummern für digitale Produkte (ESD)",
+      "en-GB": "Serialnumbers for digital products (ESD)"
+    },
+    "description": {
+      "de-DE": "Hinterlege für digitale Produkte (ESD) Seriennummern je Artikel oder Variante. Unser Plugin basiert auf dem Shopware-Standard für digitale Produkte (ESD).",
+      "en-GB": "Assign serial numbers on digital products (ESD) based on main article or variant. Our plugin is based on the Shopware standard for digital products (ESD)."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://www.bergisch-ecommerce.de/",
+      "en-GB": "https://www.bergisch-ecommerce.de/"
+    },
+    "supportLink": {
+      "de-DE": "https://www.bergisch-ecommerce.de/support",
+      "en-GB": "https://www.bergisch-ecommerce.de/support"
+    },
+    "copyright": "(c) Bergisch eCommerce GmbH"
+  }
+}

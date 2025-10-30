@@ -1,0 +1,5 @@
+{% sw_extends '@Framework/documents/delivery_note.html.twig' %}
+
+{% block document_line_item_table_column_label %}
+    {% sw_include '@TmmsProductCustomerInputs/documents/_includes/customerinput.html.twig' %}
+{% endblock %}

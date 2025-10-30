@@ -1,0 +1,66 @@
+<sw-tabs class="dne-template-manager-tree">
+    <sw-tabs-item
+        :active="!isDocuments"
+        :disabled="tabsDisabled || isLoading"
+        @click="isDocuments = false"
+    >
+        {{ $t('dne-template-manager.storefrontTab') }}
+    </sw-tabs-item>
+    <sw-tabs-item
+        :active="isDocuments"
+        :disabled="tabsDisabled || isLoading"
+        @click="isDocuments = true"
+    >
+        {{ $t('dne-template-manager.documentsTab') }}
+    </sw-tabs-item>
+
+    <template slot="content">
+        <sw-data-grid
+                :dataSource="getItems"
+                :columns="columns"
+                :fullPage="false"
+                :showSettings="false"
+                :showSelection="false"
+                :showActions="false"
+                :isLoading="isLoading"
+                :allowColumnEdit="false"
+                :allowInlineEdit="false">
+            <template #column-name="{ item }">
+                <a
+                    href="#"
+                    :class="{
+                        'sw-button-active': selection === item.id,
+                        'is-custom': item.custom === 1
+                    }"
+                    @click.prevent="changeItem(item)"
+                >
+                    <sw-icon
+                        v-if="item.custom === 1"
+                        name="regular-file"
+                        :color="selection === item.id ? '#ffffff' : '#007bff'"
+                        size="14">
+                    </sw-icon>
+                    <sw-icon
+                        v-else
+                        name="regular-chevron-right"
+                        size="14">
+                    </sw-icon>
+                    {{ item.name }}
+                </a>
+            </template>
+            <template #column-label-name>
+                <span>
+                    {{ $t('dne-template-manager.nameLabel') }}
+                </span>
+                <sw-text-field
+                    v-model:value="searchText"
+                    :placeholder="$t('dne-template-manager.searchLabel')"
+                ></sw-text-field>
+                <sw-switch-field
+                    v-model:value="editedOnly"
+                    :label="$t('dne-template-manager.editedOnlyLabel')"
+                ></sw-switch-field>
+            </template>
+        </sw-data-grid>
+    </template>
+</sw-tabs>

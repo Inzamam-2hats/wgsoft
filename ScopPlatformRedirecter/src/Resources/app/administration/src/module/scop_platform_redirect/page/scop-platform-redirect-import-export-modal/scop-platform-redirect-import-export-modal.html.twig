@@ -1,0 +1,48 @@
+{% block scop_platform_redirect_import_modal %}
+    <div class="scop-platform-redirect-import-export-modal">
+        <sw-modal
+                v-if="show"
+                class="scop-platform-redirect-import-export-modal"
+                :title="$tc('scopplatformredirecter.list.' + type + 'Modal.title')"
+                variant="large"
+                @modal-close="onClose"
+        >
+            {% block scop_platform_redirect_import_modal_content %}
+
+                <sw-card :hero="true" :isLoading="processing" v-if="type === 'import'">
+                    <sw-file-input
+                            v-model:value="selectedFile"
+                            :maxFileSize="8*1024*1024"
+                            @update:value="onFileChange">
+                    </sw-file-input>
+                </sw-card>
+            {% endblock %}
+            {% block scop_platform_redirect_import_modal_options %}
+                <sw-entity-single-select
+                        :label="$tc('sw-import-export.importer.profileLabel')"
+                        :criteria="profileCriteria"
+                        entity="import_export_profile"
+                        label-property="label"
+                        :value="selectedProfileId"
+                        required
+                        show-clearable-button
+                        @update:value="onProfileSelect"></sw-entity-single-select>
+                <div class="scop-platform-redirect-import-export-modal-activity">
+                    <scop-platform-redirect-import-export-activity
+                            ref="activityGrid"
+                            :type="type"></scop-platform-redirect-import-export-activity>
+                </div>
+            {% endblock %}
+            {% block scop_platform_redirect_import_modal_footer %}
+                <template #modal-footer>
+                    <sw-button @click="onClose" :disabled="processing">
+                        {{ $t('scopplatformredirecter.list.' + type + 'Modal.cancel') }}
+                    </sw-button>
+                    <sw-button variant="primary" :disabled="noFile && type !== 'export'" :isLoading="processing" @click="startProcess">
+                        {{ $t('scopplatformredirecter.list.' + type + 'Modal.start') }}
+                    </sw-button>
+                </template>
+            {% endblock %}
+        </sw-modal>
+    </div>
+{% endblock %}

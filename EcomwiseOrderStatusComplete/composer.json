@@ -1,0 +1,39 @@
+{
+  "name": "ecomwise/order-status-complete",
+  "description": "Complete Order Status",
+  "type": "shopware-platform-plugin",
+  "version": "2.0.0",
+  "require": {
+    "shopware/core": "^6.6"
+  },
+  "authors": [
+    {
+        "name": "Ecomwise B.V."
+    }
+  ],
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "EcomwiseOrderStatusComplete\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "EcomwiseOrderStatusComplete\\EcomwiseOrderStatusComplete",
+    "label": {
+      "en-GB": "Complete Order Status",
+      "de-DE": "Bestellstatus abgeschlossen"
+    },
+    "description": {
+        "en-GB": "Set the order status to complete if payment status is paid and delivery status is shipped. Mass action present on order grid for changing multiple order statuses to done.",
+        "de-DE": "Setzen Sie den Bestellstatus auf abgeschlossen, wenn der Zahlungsstatus bezahlt und der Lieferstatus versendet ist. Massenaktion im Auftragsraster vorhanden, um mehrere Auftragsstatus in erledigt zu ändern."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://store.shopware.com/ecomw.html",
+      "en-GB": "https://store.shopware.com/en/ecomw.html"
+    },
+    "supportLink": {
+        "de-DE": "https://issues.shopware.com/",
+        "en-GB": "https://issues.shopware.com/"
+    }
+  }
+}

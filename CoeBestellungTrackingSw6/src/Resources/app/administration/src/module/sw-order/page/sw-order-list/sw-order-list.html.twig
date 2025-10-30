@@ -1,0 +1,10 @@
+{% block sw_order_list_grid_columns %}
+    {% parent() %}
+
+    {% block sw_order_list_grid_columns_trackingcodes %}
+        <template #column-deliveries="{ item }">
+            {{ getTrackingNumbers(item)}}
+        </template>
+    {% endblock %}
+
+{% endblock %}

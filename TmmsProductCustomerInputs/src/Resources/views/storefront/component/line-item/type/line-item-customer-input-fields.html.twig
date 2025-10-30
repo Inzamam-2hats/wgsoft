@@ -1,0 +1,151 @@
+{% block component_line_item_type_product_customerinput %}
+    {% set extension = lineItem.extensions %}
+    {% set tmmsLineItemCustomerInputCountValue = extension['tmmsLineItemCustomerInputCountValue'].value %}
+
+    {% set productId = lineItem.referencedId %}
+    {% set productNumber = lineItem.payload.productNumber %}
+
+    {% if (((config('TmmsProductCustomerInputs.config.customerInputShowOnOffcanvasCartPage') and (displayMode === 'offcanvas')) or (config('TmmsProductCustomerInputs.config.customerInputShowOnCartPage') and (controllerAction|lower == "cartpage")) or (config('TmmsProductCustomerInputs.config.customerInputShowOnConfirmPage') and (controllerAction|lower == "confirmpage"))) and config('TmmsProductCustomerInputs.config.customerInputIsInAnAccordionInCheckout')) %}
+        {% set tmmsCustomerInputValueCountAccordion = 0 %}
+
+        {% for tmmsCustomerInputCount in 1..tmmsLineItemCustomerInputCountValue %}
+            {% set tmmsCustomerInputValue = extension['tmmsLineItemCustomerInput' ~ tmmsCustomerInputCount].value %}
+
+            {% set customFields = lineItem.payload.customFields %}
+
+            {% if not(customFields) %}
+                {% set customFields = extension['tmmsLineItemProductCustomFields'] %}
+            {% endif %}
+
+            {% set tmmsCustomerInputActive = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_active' %}
+            {% set tmmsCustomerInputFieldtype = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_fieldtype' %}
+            {% set tmmsCustomerInputSelectfieldvalues = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_selectfieldvalues' %}
+
+            {% if (customFields[tmmsCustomerInputActive] and (config('TmmsProductCustomerInputs.config.customerInputShowEmptyFieldInCheckout') or (config('TmmsProductCustomerInputs.config.customerInputShowEmptyFieldInCheckout') == false and tmmsCustomerInputValue != "")) and ((customFields[tmmsCustomerInputFieldtype] == "select" and customFields[tmmsCustomerInputSelectfieldvalues]) or (customFields[tmmsCustomerInputFieldtype] != "select"))) %}
+                {% if customFields['tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_active'] and (config('TmmsProductCustomerInputs.config.customerInputShowEmptyFieldInCheckout') or (config('TmmsProductCustomerInputs.config.customerInputShowEmptyFieldInCheckout') == false and extension['tmmsLineItemCustomerInput' ~ tmmsCustomerInputCount].value != "")) %}
+                    {% set tmmsCustomerInputValueCountAccordion = tmmsCustomerInputValueCountAccordion + 1 %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {% if tmmsCustomerInputValueCountAccordion > 0 %}
+            <div class="line-item-customer-input-{{ tmmsPageType }}-container" id="line-item-customer-input-{{ tmmsPageType }}-container-accordion-{{ productId }}">
+                <div class="card">
+                    <div class="card-header" id="heading-line-item-customer-input-{{ tmmsPageType }}-{{ productId }}">
+                        <a class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#content-line-item-customer-input-{{ tmmsPageType }}-{{ productId }}" aria-expanded="true" aria-controls="collapse">
+                            {{ "tmms.customerInput.accordionHeadingLabel"|trans|raw }}
+                            {% sw_icon 'arrow-medium-down' style {
+                                'pack': 'solid', 'size': 'xs', 'class': ''
+                            } %}
+                            {% sw_icon 'arrow-medium-up' style {
+                                'pack': 'solid', 'size': 'xs', 'class': ''
+                            } %}
+                        </a>
+                    </div>
+                    <div id="content-line-item-customer-input-{{ tmmsPageType }}-{{ productId }}" class="collapse" aria-labelledby="heading-line-item-customer-input-{{ tmmsPageType }}-{{ productId }}" data-parent="#line-item-customer-input-{{ tmmsPageType }}-container-accordion-{{ productId }}">
+                        <div class="card-body">
+        {% endif %}
+    {% endif %}
+
+    {% for tmmsCustomerInputCount in 1..tmmsLineItemCustomerInputCountValue %}
+        {% set tmmsCustomerInputValue = extension['tmmsLineItemCustomerInput' ~ tmmsCustomerInputCount].value %}
+
+        {% set requiredFormName = tmmsRequiredFormName %}
+
+        {% set customFields = lineItem.payload.customFields %}
+
+        {% if not(customFields) %}
+            {% set customFields = extension['tmmsLineItemProductCustomFields'] %}
+        {% endif %}
+
+        {% set tmmsCustomerInputActive = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_active' %}
+        {% set tmmsCustomerInputFieldtype = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_fieldtype' %}
+        {% set tmmsCustomerInputTitle = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_title' %}
+        {% set tmmsCustomerInputPlaceholder = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_placeholder' %}
+        {% set tmmsCustomerInputRequired = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_required' %}
+        {% set tmmsCustomerInputMinvalue = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_minvalue' %}
+        {% set tmmsCustomerInputMaxvalue = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_maxvalue' %}
+        {% set tmmsCustomerInputStepvalue = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_stepsvalue' %}
+        {% set tmmsCustomerInputStartdate = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_startdate' %}
+        {% set tmmsCustomerInputEnddate = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_enddate' %}
+        {% set tmmsCustomerInputDisableddates = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_disableddates' %}
+        {% set tmmsCustomerInputStarttime = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_starttime' %}
+        {% set tmmsCustomerInputEndtime = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_endtime' %}
+        {% set tmmsCustomerInputDaterange = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_daterange' %}
+        {% set tmmsCustomerInputSelectfieldvalues = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_selectfieldvalues' %}
+        {% set customerInputCanChanged = 0 %}
+
+        {% if (customFields[tmmsCustomerInputActive] and (config('TmmsProductCustomerInputs.config.customerInputShowEmptyFieldInCheckout') or (config('TmmsProductCustomerInputs.config.customerInputShowEmptyFieldInCheckout') == false and tmmsCustomerInputValue != "")) and (controllerAction|lower != "finishpage") and ((customFields[tmmsCustomerInputFieldtype] == "select" and customFields[tmmsCustomerInputSelectfieldvalues]) or (customFields[tmmsCustomerInputFieldtype] != "select"))) %}
+            {% if (config('TmmsProductCustomerInputs.config.customerInputShowOnOffcanvasCartPage') and (displayMode === 'offcanvas')) or (config('TmmsProductCustomerInputs.config.customerInputShowOnCartPage') and (controllerAction|lower == "cartpage")) or (config('TmmsProductCustomerInputs.config.customerInputShowOnConfirmPage') and (controllerAction|lower == "confirmpage")) %}
+                {% set tmmsCustomerInputValueCount = 0 %}
+                {% set tmmsCustomerInputLastElement = 0 %}
+
+                {% for tmmsCustomerInputCount in 1..tmmsLineItemCustomerInputCountValue %}
+                    {% if customFields['tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_active'] and (config('TmmsProductCustomerInputs.config.customerInputShowEmptyFieldInCheckout') or (config('TmmsProductCustomerInputs.config.customerInputShowEmptyFieldInCheckout') == false and extension['tmmsLineItemCustomerInput' ~ tmmsCustomerInputCount].value != "")) %}
+                        {% set tmmsCustomerInputValueCount = tmmsCustomerInputValueCount + 1 %}
+                        {% set tmmsCustomerInputLastElement = tmmsCustomerInputCount %}
+                    {% endif%}
+                {% endfor %}
+
+                {% block component_line_item_type_product_customerinput_inner %}
+                    <div class="line-item line-item-customer-input-{{ tmmsPageType }} line-item-customer-input-{{ tmmsPageType }}-count-{{ tmmsCustomerInputValueCount }}{% if tmmsCustomerInputCount == 1 %} first-element{% if not(config('TmmsProductCustomerInputs.config.customerInputShowDividingLineCheckout')) %} hide-dividing-line{% endif %}{% endif %}{% if tmmsCustomerInputCount == tmmsCustomerInputLastElement %} last-element{% endif %}{% if config('TmmsProductCustomerInputs.config.customerInputIsInAnAccordionInCheckout') %} has-accordion{% else %} has-no-accordion{% endif %}">
+                        <div class="{% if tmmsPageType == "checkout" %}row {% endif %}line-item-row tmms-customer-input-{{ tmmsPageType }}-box">
+                            {% if config('TmmsProductCustomerInputs.config.customerInputCanChangedInCheckout') %}
+                                {% set customerInputCanChanged = 1 %}
+
+                                {% if (not(config('TmmsProductCustomerInputs.config.customerInputRequiredFieldCanChangedInCart')) and (controllerAction|lower == "cartpage" or displayMode === 'offcanvas')) or (not(config('TmmsProductCustomerInputs.config.customerInputRequiredFieldCanChangedOnConfirmPage')) and (controllerAction|lower == "confirmpage")) %}
+                                    {% if customFields[tmmsCustomerInputRequired] %}
+                                        {% set customerInputCanChanged = 0 %}
+                                    {% else %}
+                                        {% set customerInputCanChanged = 1 %}
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                {% set customerInputCanChanged = 0 %}
+                            {% endif %}
+
+                            {% if tmmsPageType == "checkout" %}<div class="col-4 line-item-customer-input-label tmms-customer-input-{{ tmmsPageType }}-box-title-container">{% endif %}
+                                {% if customerInputCanChanged == 1 %}{% if customFields[tmmsCustomerInputFieldtype] == "input" or customFields[tmmsCustomerInputFieldtype] == "textarea" or customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date" or customFields[tmmsCustomerInputFieldtype] == "time" or customFields[tmmsCustomerInputFieldtype] == "select" %}<label for="tmms-customer-input-value-{{ prefix }}{{ productId }}-{{ tmmsCustomerInputCount }}">{% elseif customFields[tmmsCustomerInputFieldtype] == "boolean" %}<div>{% endif %}{% else %}<div>{% endif %}
+                                    {% if customFields[tmmsCustomerInputTitle] %}
+                                        {{ customFields[tmmsCustomerInputTitle] }}
+                                    {% else %}
+                                        {{ "tmms.customerInput.titleLabel"|trans|raw }}
+                                    {% endif %}
+                                {% if customerInputCanChanged == 1 %}{% if customFields[tmmsCustomerInputFieldtype] == "input" or customFields[tmmsCustomerInputFieldtype] == "textarea" or customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date" or customFields[tmmsCustomerInputFieldtype] == "time" or customFields[tmmsCustomerInputFieldtype] == "select" %}</label>{% elseif customFields[tmmsCustomerInputFieldtype] == "boolean" %}</div>{% endif %}{% else %}</div>{% endif %}
+                            {% if tmmsPageType == "checkout" %}</div>{% endif %}
+
+                            <div class="{% if tmmsPageType == "checkout" %}col-8 {% endif %}line-item-customer-input-field{% if customerInputCanChanged == 1 and customFields[tmmsCustomerInputFieldtype] == "boolean" %} form-check{% if customerInputCanChanged == 1 %} has-input-field{% endif %}{% endif %}">
+                                {% if customerInputCanChanged == 1 %}
+                                    <form id="productCustomerInputForm{{ tmmsPageTypeCapitalize }}-{{ productId }}-{{ tmmsCustomerInputCount }}" class="tmms-customer-input-{{ tmmsPageType }}-box-form{% if config('TmmsProductCustomerInputs.config.customerInputHighlightRequiredFieldInColor') and (customFields[tmmsCustomerInputRequired]) %} was-validated{% endif %}" action="{{ path('frontend.savecustomerinputs.request') }}" method="post">
+                                        {% sw_include '@TmmsProductCustomerInputs/storefront/component/buy-widget/buy-widget-customer-input-fields.html.twig' with {
+                                            prefix: prefix
+                                        } %}
+                                    </form>
+                                    {% if customFields[tmmsCustomerInputRequired] %}
+                                        <small class="form-text required-text{% if customFields[tmmsCustomerInputFieldtype] == "boolean" %} is-checkbox{% endif %}">
+                                            {{ "tmms.customerInput.requiredLabel"|trans|raw }}
+                                        </small>
+                                    {% endif %}
+                                {% else %}
+                                    {% if customFields[tmmsCustomerInputFieldtype] == "boolean" %}
+                                        <i>{% if customFields[tmmsCustomerInputPlaceholder] %}{{ customFields[tmmsCustomerInputPlaceholder] }}{% else %}{{ "tmms.customerInput.placeholderLabel"|trans|raw }}{% endif %}</i>
+                                        {{ "tmms.customerInput.openingRoundBracket"|trans|raw }}{% if tmmsCustomerInputValue == 1 %}{{ "tmms.customerInput.selectedValue"|trans|raw }}{% else %}{{ "tmms.customerInput.unselectedValue"|trans|raw }}{% endif %}{{ "tmms.customerInput.closedRoundBracket"|trans|raw }}
+                                    {% else %}
+                                        <i>{{ tmmsCustomerInputValue }}</i>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endblock %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if ((config('TmmsProductCustomerInputs.config.customerInputShowOnOffcanvasCartPage') and (displayMode === 'offcanvas')) or (config('TmmsProductCustomerInputs.config.customerInputShowOnCartPage') and (controllerAction|lower == "cartpage")) or (config('TmmsProductCustomerInputs.config.customerInputShowOnConfirmPage') and (controllerAction|lower == "confirmpage"))) and config('TmmsProductCustomerInputs.config.customerInputIsInAnAccordionInCheckout') and tmmsCustomerInputValueCountAccordion > 0 %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% endif %}
+{% endblock %}

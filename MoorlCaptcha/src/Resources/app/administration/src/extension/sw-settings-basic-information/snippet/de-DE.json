@@ -1,0 +1,26 @@
+{
+  "sw-settings-basic-information": {
+    "captcha": {
+      "label": {
+        "moorlCaptchaTo": "moori timeout CAPTCHA",
+        "moorlCaptchaBw": "moori bad word CAPTCHA"
+      },
+      "moorlCaptchaToDescription": "Legen Sie eine Zeitüberschreitung fest. Wenn das Formular früher abgeschickt wird, ist das Captcha ungültig.",
+      "moorlCaptchaToTimeout": "Timout (Sekunden) bis Captcha gültig wird",
+      "moorlCaptchaToAllowRetry": "Captcha bei Fehler nicht zurücksetzen (XHR-basierte Formulare)",
+      "moorlCaptchaBw": {
+        "description": "Dieses Captcha durchsucht die gesendeten Daten nach Mustern, wie z.B. böse Wörter. Sobald ein Muster übereinstimmt, ist das Captcha ungültig.",
+        "properties": {
+          "name": "Technischer Name",
+          "description": "Beschreibung",
+          "active": "Aktiv",
+          "regex": "Regulärer Ausdruck"
+        },
+        "helpText": {
+          "name": "Verwende * für alle Felder oder durch Komma getrennte Felder, z.B. email,firstname,lastname...",
+          "regex": "Verwende Reguläre Ausdrücke, z.B.: /(?:bull)shit/i"
+        }
+      }
+    }
+  }
+}

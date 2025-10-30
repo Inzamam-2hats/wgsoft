@@ -1,0 +1,24 @@
+{
+    "dne-template-manager": {
+        "title": "Custom Template Manager",
+        "menuEntry": "Custom Template",
+        "storefrontTab": "Verkaufskanal",
+        "documentsTab": "Dokumente",
+        "nameLabel": "Pfad",
+        "searchLabel": "Suchen",
+        "editedOnlyLabel": "nur bearbeitete",
+        "contentLabel": "Custom Template Inhalt von",
+        "originalContentLabel": "Original Template Inhalt",
+        "saveButton": "Speichern",
+        "deleteButton": "Löschen",
+        "cancelButton": "Abbreichen",
+        "deleteWarning": "Sind Sie sicher, dass Sie das Custom Template endgültig löschen möchten?"
+    },
+    "sw-privileges": {
+        "permissions": {
+            "dne_template_manager": {
+                "label": "Custom Template"
+            }
+        }
+    }
+}

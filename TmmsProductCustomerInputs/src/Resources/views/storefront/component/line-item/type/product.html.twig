@@ -1,0 +1,45 @@
+{% sw_extends '@Storefront/storefront/component/line-item/type/product.html.twig' %}
+
+{% block component_line_item_type_product %}
+    {{ parent() }}
+
+    {# offcanvas and checkout #}
+    {% if displayMode === 'offcanvas' %}
+        {% set prefix = 'offcanvas-' %}
+        {% set tmmsPageType = 'offcanvas' %}
+        {% set tmmsPageTypeCapitalize = 'Offcanvas' %}
+        {% set tmmsRequiredFieldIsPossible = 0 %}
+        {% set tmmsRequiredFormName = 'offcanvasForm' %}
+    {% else %}
+        {% set prefix = '' %}
+        {% set tmmsPageType = 'checkout' %}
+        {% set tmmsPageTypeCapitalize = '' %}
+        {% set tmmsRequiredFieldIsPossible = 2 %}
+        {% set tmmsRequiredFormName = 'confirmOrderForm' %}
+    {% endif %}
+
+    {% block component_line_item_type_product_customerinput %}
+        {% sw_include '@TmmsProductCustomerInputs/storefront/component/line-item/type/line-item-customer-input-fields.html.twig' with {
+            prefix: prefix,
+            tmmsPageType: tmmsPageType,
+            tmmsPageTypeCapitalize: tmmsPageTypeCapitalize,
+            tmmsRequiredFieldIsPossible: tmmsRequiredFieldIsPossible,
+            tmmsRequiredFormName: tmmsRequiredFormName
+        } %}
+    {% endblock %}
+{% endblock %}
+
+{% block component_line_item_type_product_number %}
+    {{ parent() }}
+
+    {# page/account/order-history/order-detail-list.htnl.twig, page/account/order/index.html.twig and page/checkout/finish/index.html.twig #}
+    {% if (not(showRemoveButton) and (displayMode === 'order')) or (not(showRemoveButton) and (controllerAction|lower === "finishpage")) %}
+        {% for tmmsCustomerInputCount in 1..page.tmmsCustomerInputCountValue %}
+            {% set tmmsCustomerInputCssClass = 'line-item-customer-input-fields-no-edit' %}
+
+            {% block component_line_item_type_product_number_customerinput %}
+                {% sw_include '@TmmsProductCustomerInputs/storefront/page/line-item-customer-input-fields-no-edit.html.twig' %}
+            {% endblock %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

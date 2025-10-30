@@ -1,0 +1,13 @@
+{% set customFields = lineItem.customFields %}
+{% set tmmsCustomerInputValue = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_value' %}
+{% set tmmsCustomerInputFieldtype = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_fieldtype' %}
+{% set tmmsCustomerInputLabel = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_label' %}
+{% set tmmsCustomerInputPlaceholder = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_placeholder' %}
+
+{% if customFields[tmmsCustomerInputValue] %}
+    {% block component_line_item_type_product_order_number_customerinput_inner %}
+        <div class="{{ tmmsCustomerInputCssClass }}">
+            {{ customFields[tmmsCustomerInputLabel] }} {% if customFields[tmmsCustomerInputFieldtype] == "boolean" %}<i>"{{ customFields[tmmsCustomerInputPlaceholder] }}"</i> {{ "tmms.customerInput.openingRoundBracket"|trans|raw }}{{ customFields[tmmsCustomerInputValue] }}{{ "tmms.customerInput.closedRoundBracket"|trans|raw }}{% else %}<i>"{{ customFields[tmmsCustomerInputValue] }}"</i>{% endif %}
+        </div>
+    {% endblock %}
+{% endif %}

@@ -1,0 +1,62 @@
+.content-main {
+    //background-color: #e9e9f0;
+}
+
+.cms-section .cms-section-sidebar {
+    background-color: white;
+}
+
+.main-navigation{
+    background-color: white;
+    //$sw-color-brand-primary;
+    border-bottom: 1px solid $sw-color-brand-primary;
+}
+
+
+.main-navigation-link{
+    padding: 0.3rem 0.875rem 0rem 0.875rem;
+}
+
+
+.main-navigation-link.active{
+    color: white;
+    background-color: $sw-color-brand-primary;
+    font-weight: normal;
+}
+
+.breadcrumb {
+    --bs-breadcrumb-margin-bottom: 0.1rem;
+    //--bs-breadcrumb-padding-x: 1rem;
+    --bs-breadcrumb-padding-y: 0.3rem;
+    background-color: white;
+}
+
+.product-detail{
+    //background-color: white;
+}
+
+.product-detail-content{
+    //padding: 1.0rem;
+}
+
+.product-detail-tabs{
+    //padding-inline: 1.0rem;
+}
+
+// Conversion Header oben
+.ch-desktop-wrapper{
+    background-color: $sw-color-brand-primary !important;
+}
+
+/* AGB-Abfrage Label nach link verschieben, um die Breite vom Checkbox zu compensieren*/
+.checkout-confirm-tos-label {
+    margin-left: -1.5rem;
+    }
+
+.product-detail-tax-container a[data-ajax-modal] {
+    text-decoration: none;
+}
+
+.home-bestsellers-slider .tns-nav {
+    display: none;
+}

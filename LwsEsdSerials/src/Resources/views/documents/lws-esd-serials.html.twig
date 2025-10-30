@@ -1,0 +1,8 @@
+{% if lineItem.extensions && lineItem.extensions.lwsEsdSerials %}
+    <div class="serial-numbers">
+        <div class="serial-numbers-label"><b>{{ "lws-esd-serials.serialNumber"|trans }}:</b></div>
+        {% for serial in lineItem.extensions.lwsEsdSerials %}
+            <div class="serial">{{ serial.serialNumber }}</div>
+        {% endfor %}
+    </div>
+{% endif %}

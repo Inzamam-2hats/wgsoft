@@ -1,0 +1,137 @@
+{% block list %}
+
+    <div>
+        <sw-card
+                class="serials-listing__card"
+                :is-loading="isLoading"
+                position-identifier="serials-listing__card">
+
+            <template #title>
+                {% block card_title %}
+                    <div class="sw-card__title">
+
+                        {% block card_title_text %}
+                            {{ $tc('lws-esd-serials.serials-listing.cardTitle') }}
+                        {% endblock %}
+
+                    </div>
+                {% endblock %}
+            </template>
+
+            <template #header-right>
+                <sw-button
+                        class="serials-listing__add"
+                        :disabled="!acl.can('lws_esd_serials:create')"
+                        variant="primary"
+                        @click="onOpen">
+                    {{ $tc('lws-esd-serials.serials-listing.addButtonLabel') }}
+                </sw-button>
+
+            </template>
+
+            <template #grid>
+
+                <sw-container rows="auto auto">
+
+                    {% block listing %}
+                        <sw-entity-listing
+                                v-if="dataEntries.length > 0"
+                                ref="entityListing"
+                                identifier="serials-listing-entity-listing"
+                                :items="dataEntries"
+                                :data-source="dataEntries"
+                                :columns="columns"
+                                :repository="repository"
+                                :plain-appearance="true"
+                                :full-page="false"
+                                :show-settings="false"
+                                :allow-edit="acl.can('lws_esd_serials:update')"
+                                :allow-inline-edit="acl.can('lws_esd_serials:update')"
+                                :allow-delete="acl.can('lws_esd_serials:delete')"
+                                @delete-item-finish="loadDataEntries"
+                                @items-delete-finish="loadDataEntries"
+                        >
+
+                            <template #column-assignDate="{ item }">
+                                <sw-time-ago :date="item.assignDate" />
+                            </template>
+
+                            <template #detail-action="{ item }">
+                                {% block bec_serials_serial_listing_order_button %}
+                                    <sw-context-menu-item
+                                            v-if="item.orderId"
+                                            class="sw-order-list-order-view-action"
+                                            :router-link="{ name: 'sw.order.detail', params: { id: item.orderId } }"
+                                    >
+                                        {{ $tc('lws-esd-serials.serials-listing.detailOrder') }}
+                                    </sw-context-menu-item>
+                                {% endblock %}
+                            </template>
+
+                            <template #column-position="{ item }">
+                                <template>
+                                    {{ item.position }}
+                                </template>
+                            </template>
+
+                        </sw-entity-listing>
+                    {% endblock %}
+
+                    {% block sw_product_properties_filled_state_body_empty_state %}
+                        <sw-empty-state
+                                v-if="dataEntries.length <= 0"
+                                :absolute="false"
+                                :show-description="false"
+                                :title="$tc('lws-esd-serials.serials-listing.titleEmptyLayerList')">
+                            <template #icon>
+
+                                {% block sw_product_properties_filled_state_body_empty_state_image %}
+                                    <img
+                                            :src="assetFilter('/administration/static/img/empty-states/products-empty-state.svg')"
+                                            :alt="$tc('lws-esd-serials.serials-listing.titleEmptyLayerList')"
+                                    >
+                                {% endblock %}
+                            </template>
+                        </sw-empty-state>
+
+                    {% endblock %}
+
+                    <sw-loader
+                            v-if="isLoading"/>
+
+                </sw-container>
+            </template>
+        </sw-card>
+
+
+        <sw-modal
+                v-if="showDetailModal"
+                :title="$tc('lws-esd-serials.serials-detail.title')"
+                @modal-close="onDetailModalCancel">
+
+            <lws-esd-serials-detail
+                    :entity="selectedEntry"
+                    ref="detail"
+                    @afterSave="onAfterSave"></lws-esd-serials-detail>
+
+            <template #modal-footer>
+                <sw-button
+                        size="small"
+                        @click="onDetailModalCancel">
+                    {{ $tc('lws-esd-serials.serials-detail.cancel') }}
+                </sw-button>
+                <sw-button
+                        class="sw-product-add-properties-modal__button-save"
+                        variant="primary"
+                        size="small"
+                        @click="onDetailSave">
+                    {{ $tc('lws-esd-serials.serials-detail.save') }}
+                </sw-button>
+
+            </template>
+
+        </sw-modal>
+
+    </div>
+
+{% endblock %}

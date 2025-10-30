@@ -1,0 +1,24 @@
+
+<sw-inherit-wrapper
+        v-if="showModeSetting"
+        v-model:value="product.maxPurchase"
+        class="sw-product-deliverability__max-purchase"
+        :has-parent="!!parentProduct.id"
+        :inherited-value="parentProduct.maxPurchase"
+>
+    <template #content="props">
+
+        <sw-number-field
+                :map-inheritance="props"
+                number-type="int"
+                :allow-empty="true"
+                :min="0"
+                :error="productMaxPurchaseError"
+                :label="$tc('sw-product.settingsForm.labelMaxPurchase')"
+                :placeholder="$tc('sw-product.settingsForm.placeholderMaxPurchase')"
+                :disabled="props.isInherited || !allowEdit"
+                :value="props.currentValue"
+                @update:value="props.updateCurrentValue"
+        />
+    </template>
+</sw-inherit-wrapper>

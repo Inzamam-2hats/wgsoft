@@ -1,0 +1,11 @@
+{
+    "orderStatusComplete": {
+        "entity-components": {
+            "doneMessage": "Weet u zeker dat u de bestellingen wilt markeren als afgerond? | Weet u zeker dat u {count} bestellingen wilt markeren als afgerond?",
+            "mainLabel": "Markeer als afgerond",
+            "infoMessage": "Bulk actie afgerond",
+            "errorMessage": "Bestelling kan niet gevonden worden"
+        }
+    }
+}
+  

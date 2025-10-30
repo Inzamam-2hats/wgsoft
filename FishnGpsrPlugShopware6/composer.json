@@ -1,0 +1,40 @@
+{
+  "name": "fishn/gpsr-plug-shopware6",
+  "description": "Extension of the manufacturer data for the EU Product Safety Regulation (GPSR). Inserts the necessary manufacturer data under the product description.",
+  "type": "shopware-platform-plugin",
+  "version": "1.0.3",
+  "authors": [
+    {
+      "name": "Fishnet Services"
+    }
+  ],
+  "require": {
+    "shopware/core": "^6.5"
+  },
+  "license": "proprietary",
+  "autoload": {
+    "psr-4": {
+      "Fishn\\GpsrPlugShopware6\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Fishn\\GpsrPlugShopware6\\FishnGpsrPlugShopware6",
+    "copyright": "Fishnet Services",
+    "label": {
+      "de-DE": "EU-Produktsicherheitsverordnung (GPSR) ",
+      "en-GB": "EU Product Safety Regulation (GPSR) "
+    },
+    "description": {
+      "de-DE": "Erweiterung der Herstellerdaten für die EU-Produktsicherheitsverordnung (GPSR). Fügt die notwendigen Herstellerdaten unter der Produktbeschreibung ein.",
+      "en-GB": "Extension of the manufacturer data for the EU Product Safety Regulation (GPSR). Inserts the necessary manufacturer data under the product description."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://shopbetreuung.com",
+      "en-GB": "https://ecommerce-support.com"
+    },
+    "supportLink": {
+      "de-DE": "https://shopbetreuung.com",
+      "en-GB": "https://ecommerce-support.com"
+    }
+  }
+}

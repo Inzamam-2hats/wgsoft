@@ -1,0 +1,15 @@
+{% sw_extends '@Framework/documents/delivery_note.html.twig' %}
+
+{% block document_line_item_table_column_label %}
+
+    {{ parent() }}
+
+    {% block document_line_item_lws_serials %}
+        {% if config('LwsEsdSerials.config.showSerialInDeliveryNote') %}
+            {% sw_include '@LwsEsdSerials/documents/lws-esd-serials.html.twig'
+                with {
+                lineItem: lineItem
+            }%}
+        {% endif %}
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{
+  "name": "wgsoft/child-theme",
+  "description": "WGSoft Child Theme",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+          {
+              "name": "WGSoft.de"
+          }
+      ],
+  "autoload": {
+    "psr-4": {
+      "WGSoftChildTheme\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "WGSoftChildTheme\\WGSoftChildTheme",
+    "label": {
+      "de-DE": "WGSoft Child Theme",
+      "en-GB": "WGSoft Child Theme"
+    }
+  }
+}

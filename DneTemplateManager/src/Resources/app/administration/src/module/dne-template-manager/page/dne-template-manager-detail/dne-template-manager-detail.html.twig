@@ -1,0 +1,59 @@
+{% block dne_template_manager_detail %}
+    <sw-card-view>
+        <sw-card v-if="item" :isLoading="isLoading">
+            <sw-code-editor
+                    :label="`${$t('dne-template-manager.contentLabel')} ${item.path}`"
+                    name="content"
+                    identifier="content"
+                    completionMode="entity"
+                    v-model:value="item.content">
+            </sw-code-editor>
+
+            <sw-button
+                    :isLoading="isLoading"
+                    :disabled="item.custom === 1 ? !acl.can('dne_template_manager.editor') : !acl.can('dne_template_manager.creator')"
+                    variant="primary"
+                    @click="onClickSave">
+                {{ $t('dne-template-manager.saveButton') }}
+            </sw-button>
+
+            <sw-button
+                v-if="item.custom === 1"
+                :isLoading="isLoading"
+                :disabled="!acl.can('dne_template_manager.deleter')"
+                variant="secondary"
+                @click="deleteModal = true">
+                {{ $t('dne-template-manager.deleteButton') }}
+            </sw-button>
+
+            <sw-modal v-if="deleteModal"
+                      @modal-close="deleteModal = false"
+                      :title="$tc('global.default.warning')"
+                      variant="small">
+                <p>
+                    {{ $tc('dne-template-manager.deleteWarning') }}
+                </p>
+
+                <template #modal-footer>
+                    <sw-button @click="deleteModal = false" size="small">
+                        {{ $tc('dne-template-manager.cancelButton') }}
+                    </sw-button>
+
+                    <sw-button @click="onClickDelete" variant="danger" size="small">
+                        {{ $tc('dne-template-manager.deleteButton') }}
+                    </sw-button>
+                </template>
+            </sw-modal>
+        </sw-card>
+        <sw-card v-if="item" :isLoading="isLoading">
+            <sw-code-editor
+                :label="$t('dne-template-manager.originalContentLabel')"
+                :disabled="true"
+                :editorConfig="{
+                    readOnly: true
+                }"
+                v-model:value="item.originalContent">
+            </sw-code-editor>
+        </sw-card>
+    </sw-card-view>
+{% endblock %}

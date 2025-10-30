@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="LwsEsdSerials\Core\Content\Serials\LwsEsdSerial\LwsEsdSerialDefinition">
+            <tag name="shopware.entity.definition" entity="lws_esd_serials" />
+        </service>
+
+        <service id="LwsEsdSerials\Core\Content\Serials\LwsEsdSerial\LwsEsdSerialsRepo">
+            <argument type="service" id="lws_esd_serials.repository"/>
+        </service>
+
+        <service id="LwsEsdSerials\Core\Content\Product\Product\ProductRepo">
+            <argument type="service" id="product.repository"/>
+        </service>
+
+        <service id="LwsEsdSerials\Core\Content\Serials\Flow\GrantDownloadAccessActionWithSerial"
+                 decorates="Shopware\Core\Content\Flow\Dispatching\Action\GrantDownloadAccessAction">
+            <argument type="service" id="LwsEsdSerials\Core\Content\Serials\Flow\GrantDownloadAccessActionWithSerial.inner" />
+            <argument type="service" id="LwsEsdSerials\Core\Content\Serials\LwsEsdSerial\LwsEsdSerialsRepo"/>
+            <argument type="service" id="LwsEsdSerials\Core\Content\Product\Product\ProductRepo"/>
+            <argument type="service" id="monolog.logger.lws_esd_serials" />
+        </service>
+
+        <service id="LwsEsdSerials\Core\Checkout\Order\Subscriber\OrderLoadedSubscriber">
+            <argument type="service" id="LwsEsdSerials\Core\Content\Serials\LwsEsdSerial\LwsEsdSerialsRepo"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="LwsEsdSerials\Core\Checkout\Order\OrderExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+    </services>
+</container>

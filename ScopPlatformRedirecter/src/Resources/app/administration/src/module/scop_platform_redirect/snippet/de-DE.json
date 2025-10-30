@@ -1,0 +1,73 @@
+{
+  "scopplatformredirecter": {
+    "general": {
+      "title": "Weiterleitungen",
+      "errorTitle": "Fehler"
+    },
+    "list": {
+      "columnSourceUrl": "Quell URL",
+      "columnTargetUrl": "Ziel URL",
+      "columnHttpCode": "HTTP Status Code",
+      "columnEnabled": "Aktiviert",
+      "columnQueryParamsHandling": "Umgang mit Query Parametern",
+      "createButton": "Weiterleitung anlegen",
+      "exportAllButton": "Alle Exportieren",
+      "importButton": "Importieren",
+      "faqButton": {
+        "text": "FAQ",
+        "link": "https://scope01.com/shopware-redirect-plugin/"
+      },
+      "fileNotCreated": "Die Datei konnte nicht erstellt werden",
+      "fileNotImported": "Die Datei konnte nicht importiert werden",
+      "invalidFile": "Ungültige Datei (Es muss sich um eine .csv Datei handeln)",
+      "invalidCsvFile": "Ungültige .csv Datei",
+      "importDone": "Import abgeschlossen",
+      "fileImportedNoSkip": "Es wurden {amount} Weiterleitungen importiert",
+      "fileImported": "Es wurden {amount} Weiterleitungen importiert.<br>{skipped} Weiterleitungen wurden nicht importiert, da sie bereits vorhanden waren und nicht überschrieben werden sollten",
+      "fileImportedError": "Es wurden {amount} Weiterleitungen importiert.<br>{skipped} Weiterleitungen wurden nicht importiert, da sie bereits vorhanden waren und nicht überschrieben werden sollten.<br><b>{error} Weiterleitungen in der Datei sind ungültig!</b>",
+      "importModal": {
+        "title": "Importieren",
+        "cancel": "Abbrechen",
+        "start": "Importieren"
+      },
+      "exportModal": {
+        "title": "Exportieren",
+        "cancel": "Abbrechen",
+        "start": "Exportieren"
+      },
+      "queryParamsHandlingValues": {
+        "0": "Berücksichtigen",
+        "1": "Ignorieren",
+        "2": "Übernehmen"
+      },
+      "salesChannel": "Verkaufskanal",
+      "allSalesChannels": "Alle"
+    },
+    "detail": {
+      "sourceUrlLabel": "Quell URL",
+      "targetUrlLabel": "Ziel URL",
+      "httpCodeLabel": "HTTP Status Code",
+      "enabledLabel": "Aktiviert",
+      "queryParamsHandling": "Umgang mit Query Parametern",
+      "queryParamsHandlingValues": {
+        "consider": "Query Parameter bei der Suche berücksichtigen",
+        "ignore": "Query Parameter bei der Suche ignorieren",
+        "transfer": "Query Parameter bei der Suche ignorieren und zur Ziel-URL hinzufügen"
+      },
+      "cancelButton": "Abbrechen",
+      "saveButton": "Speichern",
+      "errorSameUrlDescription": "Die Quell URL und Ziel URL dürfen nicht gleich sein",
+      "errorEmptySourceURL": "Die Quell URL darf nicht leer sein",
+      "errorEmptyTargetURL": "Die Ziel URL darf nicht leer sein",
+      "helpHere": "hier",
+      "httpCodeLabelValues": {
+        "301": "301 (Permanent verschoben)",
+        "302": "302 (Temporär verschoben)"
+      },
+      "salesChannel": {
+        "select": "Verkaufskanal",
+        "all": "Alle Verkaufskanäle"
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+    "name": "codeenterprise/coe-bestellung-tracking-sw6",
+    "description": "Trackingnummer direkt in der Liste der Bestellungen anzeigen",
+    "version": "v1.1.0",
+    "license": "proprietary",
+    "type": "shopware-platform-plugin",
+    "authors": [
+        {
+            "name": "codeenterprise GmbH",
+            "homepage" : "https://www.codeenterprise.de/"
+        }
+    ],
+    "require": {
+        "shopware/core": "~6.5"
+    },
+    "extra": {
+        "shopware-plugin-class": "CoeBestellungTrackingSw6\\CoeBestellungTrackingSw6",
+        "copyright": "(c) by codeenterprise GmbH",
+        "plugin-icon": "src/Resources/config/plugin.png",
+        "label": {
+            "de-DE": "Trackingnummer direkt in der Liste der Bestellungen anzeigen",
+            "en-GB": "Show tracking number in order listing"
+        },
+        "description": {
+            "de-DE": "Direkte Anzeige der Trackingnummer in der Liste der Bestellungen.",
+            "en-GB": "Show the tracking number in the list of orders"
+        },
+        "manufacturerLink":{
+            "de-DE": "https://www.codeenterprise.de/",
+            "en-GB": "https://www.codeenterprise.de/"
+        },
+        "supportLink":{
+            "de-DE": "https://www.codeenterprise.de/",
+            "en-GB": "https://www.codeenterprise.de/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "CoeBestellungTrackingSw6\\": "src/"
+        }
+    }
+}

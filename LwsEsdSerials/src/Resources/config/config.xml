@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Configuration</title>
+        <title lang="de-DE">Konfiguration</title>
+
+        <input-field type="bool">
+            <name>showSerialInAccount</name>
+            <label>Show serial number in customer Account</label>
+            <label lang="de-DE">Seriennummer im Kundenkonto anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showSerialInInvoice</name>
+            <label>Show serial number in invoice</label>
+            <label lang="de-DE">Seriennummer auf Rechnung anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showSerialInDeliveryNote</name>
+            <label>Show serial number in delivery note</label>
+            <label lang="de-DE">Seriennummer auf Lieferschein anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+
+    </card>
+
+</config>

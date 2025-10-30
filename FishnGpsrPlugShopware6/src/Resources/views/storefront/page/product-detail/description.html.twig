@@ -1,0 +1,10 @@
+{% sw_extends '@Storefront/storefront/page/product-detail/description.html.twig' %}
+
+{% block page_product_detail_description_content %}
+    {{ parent() }}
+
+    {% if page.product.manufacturer.customFields.fishn_gpsr_plugshopware6_cfs_description is defined %}
+        {{ page.product.manufacturer.customFields.fishn_gpsr_plugshopware6_cfs_description|raw }}
+    {% endif %}
+
+{% endblock %}

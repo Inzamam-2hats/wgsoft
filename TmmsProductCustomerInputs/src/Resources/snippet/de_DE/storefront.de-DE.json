@@ -1,0 +1,19 @@
+{
+    "tmms": {
+        "customerInput": {
+            "titleLabel": "Texteingabe:",
+            "placeholderLabel": "Bitte geben Sie einen Wert ein",
+            "openingRoundBracket": "(",
+            "closedRoundBracket": ")",
+            "selectedValue": "ausgewählt",
+            "unselectedValue": "nicht ausgewählt",
+            "requiredLabel": "Das Feld ist ein Pflichtfeld.",
+            "validityNumberStepsLabel": "Der Wert muss zwischen %minvalue% und %maxvalue% liegen und in %stepvalue%er Schritten eingegeben werden.",
+            "validityNumberLabel": "Der Wert muss zwischen %minvalue% und %maxvalue% liegen.",
+            "dateTimeFormat": "d.m.Y H:i",
+            "dateFormat": "d.m.Y",
+            "informationMessage": "Beim erneuten Legen des Produkts in den Warenkorb erhöht sich die Menge des Produkts und die vorherige Eingabe wird überschrieben. Wenn Sie weitere, abweichende Eingaben bei dem gleichen Produkt wünschen, führen Sie bitte eine weitere Bestellung durch.",
+            "accordionHeadingLabel": "Eingaben prüfen"
+        }
+    }
+}

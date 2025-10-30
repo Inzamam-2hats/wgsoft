@@ -1,0 +1,11 @@
+{
+    "orderStatusComplete": {
+        "entity-components": {
+            "doneMessage": "Are you sure you want to change this order to done? | Are you sure you want to change these {count} orders to done?",
+            "mainLabel": "Mark as done",
+            "infoMessage": "Mass action completed",
+            "errorMessage": "Unable to get order"
+        }
+    }
+}
+  

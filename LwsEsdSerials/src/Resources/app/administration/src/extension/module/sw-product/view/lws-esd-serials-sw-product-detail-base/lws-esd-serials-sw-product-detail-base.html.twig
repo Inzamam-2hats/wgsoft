@@ -1,0 +1,15 @@
+{% block sw_product_detail_base_price_card %}
+
+    <lws-esd-serials-listing v-show="productStates.includes('is-download')"></lws-esd-serials-listing>
+
+    {% parent %}
+{% endblock %}
+
+
+{% block sw_product_detail_deliverability_downloadable_info_form %}
+
+    {% parent %}
+
+    <max-purchase-input-download-products></max-purchase-input-download-products>
+
+{% endblock %}

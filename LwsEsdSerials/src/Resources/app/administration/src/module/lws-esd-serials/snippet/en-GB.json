@@ -1,0 +1,23 @@
+{
+  "lws-esd-serials": {
+    "serialNumber": "Serial number",
+    "serials-listing": {
+      "cardTitle": "Serial number",
+      "addButtonLabel": "Add",
+      "detailOpenButtonLabel": "Open",
+      "titleEmptyLayerList": "No serial numbers.",
+      "serialNumber":  "Serial number",
+      "assignDate": "Assign date",
+      "detailOrder": "Open order"
+    },
+    "serials-detail": {
+      "cardTitle": "Serial number",
+      "title": "Serial number",
+      "labelSerial": "Serial number",
+      "successMessage": "Successful saved.",
+      "notificationSaveErrorMessageRequiredFieldsInvalid": "Input invalid.",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  }
+}

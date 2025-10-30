@@ -1,0 +1,29 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_header_inner %}
+
+{% set item = page.header.extensions['EmzConversionHeader'] %}
+
+    <div class="ch-desktop-wrapper">
+        <div class="container">
+            <div class="ch-item">
+                {{ item.get('EmzPlatformConversionHeader.config.desktopText1')|raw}}
+            </div>
+            <div class="ch-item">
+                  {{ item.get('EmzPlatformConversionHeader.config.desktopText2')|raw}}
+            </div>
+            <div class="ch-item">
+                  {{ item.get('EmzPlatformConversionHeader.config.desktopText3')|raw}}
+            </div>
+        </div>
+    </div>
+
+    <div class="ch-mobile-wrapper">
+        <div class="container">
+            <div class="ch-item">
+                {{ item.get('EmzPlatformConversionHeader.config.mobileText1')|raw}}
+            </div>
+        </div>
+    </div>
+    {{ parent() }}
+{% endblock %}

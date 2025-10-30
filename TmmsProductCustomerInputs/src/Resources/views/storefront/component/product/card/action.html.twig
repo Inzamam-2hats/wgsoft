@@ -1,0 +1,27 @@
+{% sw_extends '@Storefront/storefront/component/product/card/action.html.twig' %}
+
+{% block component_product_box_action_buy %}
+    {% block component_product_box_action_buy_customerinput_before %}{% endblock %}
+
+    {% set tmmsCustomerInputCountValue = page.tmmsCustomerInputCountValue %}
+    {% set tmmsCustomerInputActiveValues = 0 %}
+
+    {% for tmmsCustomerInputCount in 1..tmmsCustomerInputCountValue %}
+        {% set customFields = product.translated.customFields %}
+        {% set tmmsCustomerInputActive = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_active' %}
+
+        {% if customFields[tmmsCustomerInputActive] %}
+            {% set tmmsCustomerInputActiveValues = tmmsCustomerInputActiveValues + 1 %}
+        {% endif %}
+    {% endfor %}
+
+    {% if (config('TmmsProductCustomerInputs.config.customerInputShowDetailsButtonInNavigation')) and (tmmsCustomerInputActiveValues > 0) %}
+        {% block component_product_box_action_detail %}
+            {{ parent() }}
+        {% endblock %}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+
+    {% block component_product_box_action_buy_customerinput_after %}{% endblock %}
+{% endblock %}

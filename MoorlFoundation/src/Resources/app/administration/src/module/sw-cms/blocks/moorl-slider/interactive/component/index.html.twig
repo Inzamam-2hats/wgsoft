@@ -1,0 +1,99 @@
+<div class="sw-cms-block-moorl-interactive-slider">
+    <div class="sw-cms-block-moorl-interactive-slider-config">
+        <sw-button variant="light" @click="showConfigurationModal = true">
+            {{ $tc('moorl-foundation.buttons.configuration') }}
+        </sw-button>
+
+        <sw-button variant="light" @click="addSlot()">
+            {{ $tc('moorl-foundation.buttons.add') }}
+        </sw-button>
+
+        <sw-button variant="light" @click="removeSlot()">
+            {{ $tc('moorl-foundation.buttons.remove') }}
+        </sw-button>
+
+        <sw-select-field
+                :placeholder="$tc('sw-cms.elements.moorl-foundation-listing.label.activeSlot')"
+                v-model:value="activeSlot"
+        >
+            <option v-for="slot in block.slots" :value="slot.id">{{ slot.slot }}</option>
+        </sw-select-field>
+    </div>
+
+    <div class="sw-cms-block-moorl-interactive-slider-content" ref="content">
+        <template v-for="slot in block.slots">
+            <div
+                    v-if="slot.id === activeSlot"
+                    :style="slotStyle"
+                    class="sw-cms-block-moorl-interactive-slider-slot"
+            >
+                <slot :name="slot.slot"/>
+            </div>
+        </template>
+    </div>
+
+    <sw-modal v-if="showConfigurationModal"
+              :title="$tc('sw-cms.blocks.moorl-slider.interactive')"
+              @modal-close="showConfigurationModal = false">
+        <sw-container columns="1fr 1fr" gap="0px 30px">
+            <sw-text-field
+                    v-model:value="block.customFields.moorl_interactive_slider.itemWidth"
+                    :label="$tc('sw-cms.elements.moorl-foundation-listing.label.itemWidth')"
+            />
+
+            <sw-text-field
+                    v-model:value="block.customFields.moorl_interactive_slider.itemHeight"
+                    :label="$tc('sw-cms.elements.moorl-foundation-listing.label.itemHeight')"
+            />
+
+            <sw-text-field
+                    v-model:value="block.customFields.moorl_interactive_slider.gapSize"
+                    :label="$tc('sw-cms.elements.moorl-foundation-listing.label.gapSize')"
+            />
+            
+            <sw-number-field
+                    v-model:value="block.customFields.moorl_interactive_slider.speed"
+                    :label="$tc('sw-cms.elements.moorl-foundation-listing.label.speed')"
+            />
+
+            <sw-number-field
+                    v-model:value="block.customFields.moorl_interactive_slider.autoplayTimeout"
+                    :label="$tc('sw-cms.elements.moorl-foundation-listing.label.autoplayTimeout')"
+            />
+
+            <sw-switch-field
+                    v-model:value="block.customFields.moorl_interactive_slider.autoplay"
+                    bordered
+                    :label="$tc('sw-cms.elements.moorl-foundation-listing.label.autoplay')"
+            />
+
+            <sw-switch-field
+                    v-model:value="block.customFields.moorl_interactive_slider.autoplayHoverPause"
+                    bordered
+                    :label="$tc('sw-cms.elements.moorl-foundation-listing.label.autoplayHoverPause')"
+            />
+
+            <sw-switch-field
+                    v-model:value="block.customFields.moorl_interactive_slider.navigation"
+                    bordered
+                    :label="$tc('sw-cms.elements.moorl-foundation-listing.label.navigation')"
+            />
+
+            <sw-select-field :label="$tc('sw-cms.elements.moorl-foundation-listing.label.animateIn')"
+                             :placeholder="$tc('sw-cms.elements.moorl-foundation-listing.label.animateIn')"
+                             v-model:value="block.customFields.moorl_interactive_slider.animateIn">
+                <optgroup v-for="item in moorlFoundation.animateCss" :label="item.optgroup">
+                    <option v-for="value in item.options" :value="value">{{ value }}</option>
+                </optgroup>
+            </sw-select-field>
+
+            <sw-select-field :label="$tc('sw-cms.elements.moorl-foundation-listing.label.animateOut')"
+                             :placeholder="$tc('sw-cms.elements.moorl-foundation-listing.label.animateIn')"
+                             v-model:value="block.customFields.moorl_interactive_slider.animateOut">
+                <optgroup v-for="item in moorlFoundation.animateCss" :label="item.optgroup">
+                    <option v-for="value in item.options" :value="value">{{ value }}</option>
+                </optgroup>
+            </sw-select-field>
+        </sw-container>
+    </sw-modal>
+</div>

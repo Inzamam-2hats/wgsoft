@@ -1,0 +1,9 @@
+monolog:
+  channels: ['lws_esd_serials']
+
+  handlers:
+    lwsEsdSerialsDefaultHandler:
+      type: rotating_file
+      path: "%kernel.logs_dir%/lws_esd_serials_%kernel.environment%.log"
+      level: info
+      channels: [ "lws_esd_serials" ]

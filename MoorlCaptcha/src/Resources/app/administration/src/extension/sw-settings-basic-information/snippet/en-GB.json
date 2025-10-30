@@ -1,0 +1,26 @@
+{
+  "sw-settings-basic-information": {
+    "captcha": {
+      "label": {
+        "moorlCaptchaTo": "moori timeout CAPTCHA",
+        "moorlCaptchaBw": "moori bad word CAPTCHA"
+      },
+      "moorlCaptchaToDescription": "Set a timeout. If the form is submitted earlier, the captcha is invalid.",
+      "moorlCaptchaToTimeout": "Timout (seconds) until captcha gets valid",
+      "moorlCaptchaToAllowRetry": "Do not reset captcha on failure (XHR based forms)",
+      "moorlCaptchaBw": {
+        "description": "This captcha searches the data sent for patterns, such as bad words. As soon as a pattern matches, the captcha is invalid.",
+        "properties": {
+          "name": "Technical name",
+          "description": "Description",
+          "active": "Active",
+          "regex": "Regular expression"
+        },
+        "helpText": {
+          "name": "Use * for all fields or comma for multiple fields. e.g. email,firstname,lastname...",
+          "regex": "Use regular expressions to detect bad words. Example: /(?:bull)shit/i"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+<sw-page class="moorl-demo-data-index">
+    <template #content>
+        <sw-card-view>
+            <sw-card :isLoading="isLoading" :title="$tc('moorl-foundation.label.settingsDemoData')">
+                <template v-if="options.length">
+                    <sw-select-field
+                            :label="$tc('moorl-foundation.properties.type')"
+                            v-model:value="optionIndex"
+                            @update:value="selectOption()"
+                    >
+                        <option v-for="(option, index) in options" :key="`option-${index}`" :value="index">
+                            <template v-if="option.type === 'data'">
+                                {{ $tc('moorl-foundation.label.baseData') }} | {{ option.pluginName }}
+                            </template>
+                            <template v-else>
+                                {{ $tc('moorl-foundation.label.standardDemo') }} ({{ option.name }} | {{ option.pluginName }})
+                            </template>
+                        </option>
+                    </sw-select-field>
+
+                    <sw-entity-single-select
+                            :label="$tc('moorl-foundation.properties.salesChannel')"
+                            v-model:value="item.salesChannelId"
+                            labelProperty="name"
+                            entity="sales_channel"
+                    />
+
+                    <sw-alert variant="warning">
+                        {{ $tc('moorl-foundation-settings-demo-data.notification') }}
+                    </sw-alert>
+
+                    <sw-switch-field
+                            :label="$tc('moorl-foundation-settings-demo-data.confirm')"
+                            v-model:value="confirmed"
+                    />
+
+                    <sw-button
+                            variant="primary"
+                            :disabled="!acl.can('system.system_config') || !confirmed"
+                            @click="install()"
+                    >
+                        {{ $tc('moorl-foundation.buttons.startButtonText') }}
+                    </sw-button>
+
+                    <sw-button
+                            variant="primary"
+                            :disabled="!acl.can('system.system_config')"
+                            @click="remove()"
+                    >
+                        {{ $tc('moorl-foundation.buttons.removeButtonText') }}
+                    </sw-button>
+                </template>
+
+                <template v-else>
+                    <sw-alert variant="warning">
+                        {{ $tc('moorl-foundation.notification.demoDataNotFound') }}
+                    </sw-alert>
+                </template>
+            </sw-card>
+        </sw-card-view>
+    </template>
+</sw-page>

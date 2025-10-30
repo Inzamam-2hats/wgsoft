@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- Controller -->
+        <service id="Moorl\Captcha\Storefront\Controller\CaptchaController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <!-- Captcha -->
+        <service id="Moorl\Captcha\Storefront\Framework\Captcha\CaptchaTo">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+
+            <tag name="shopware.storefront.captcha" priority="300"/>
+        </service>
+
+        <service id="Moorl\Captcha\Storefront\Framework\Captcha\CaptchaBw">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+
+            <tag name="shopware.storefront.captcha" priority="300"/>
+        </service>
+    </services>
+</container>

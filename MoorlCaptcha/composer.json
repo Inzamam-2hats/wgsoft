@@ -1,0 +1,40 @@
+{
+    "name": "moorl/captcha",
+    "description": "Captcha",
+    "version": "1.6.2",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "moori"
+        }
+    ],
+    "require": {
+        "shopware/core": "6.6.*"
+    },
+    "type": "shopware-platform-plugin",
+    "autoload": {
+        "psr-4": {
+            "Moorl\\Captcha\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "Moorl\\Captcha\\MoorlCaptcha",
+        "copyright": "(c) by moori",
+        "label": {
+            "de-DE": "Anti-Spam Captchas",
+            "en-GB": "Anti-Spam Captchas"
+        },
+        "description": {
+            "de-DE": "Diese Sammlung von Captchas bringt dir gute Möglichkeiten, unerwünschte Spambots fernzuhalten. Derzeit gibt es einen Timeout Captcha und ein frei konfigurierbares Bad-Word-Captcha!",
+            "en-GB": "This collection of captchas gives you good possibilities to keep unwanted spambots away. There is currently a timeout captcha and a freely configurable bad word captcha!"
+        },
+        "manufacturerLink": {
+            "de-DE": "https://docs.moori.net/",
+            "en-GB": "https://docs.moori.net/"
+        },
+        "supportLink": {
+            "de-DE": "https://docs.moori.net/",
+            "en-GB": "https://docs.moori.net/"
+        }
+    }
+}

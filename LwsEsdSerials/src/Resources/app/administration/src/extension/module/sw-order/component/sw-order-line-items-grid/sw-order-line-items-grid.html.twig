@@ -1,0 +1,16 @@
+{% block sw_order_line_items_grid_column_payload_options %}
+    {% parent() %}
+
+    <template v-if="item.extensions && item.extensions.lwsEsdSerials">
+
+        <div>
+            <b>{{ $tc('lws-esd-serials.serialNumber') }}:</b>
+
+            <div v-for="serial in item.extensions.lwsEsdSerials">
+                {{ serial.serialNumber }}
+            </div>
+        </div>
+
+    </template>
+
+{% endblock %}

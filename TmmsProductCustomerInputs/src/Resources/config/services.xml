@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Tmms\ProductCustomerInputs\Storefront\Subscriber\FrontendSubscriber">
+            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="order_line_item.repository"/>
+            <argument type="service" id="sales_channel.product.repository"/>
+            <argument type="service" id="Symfony\Component\HttpFoundation\RequestStack"/>
+        </service>
+
+        <service id="Tmms\ProductCustomerInputs\Storefront\Controller\SaveCustomerInputController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
+        </service>
+
+        <service id="Tmms\ProductCustomerInputs\Core\Twig\GetProductCustomFieldsHelper" public="true">
+            <argument type="service" id="sales_channel.product.repository"/>
+            <tag name="twig.extension"/>
+        </service>
+    </services>
+</container>

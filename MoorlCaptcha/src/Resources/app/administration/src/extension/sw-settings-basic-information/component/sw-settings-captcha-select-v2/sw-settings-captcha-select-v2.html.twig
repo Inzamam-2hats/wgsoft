@@ -1,0 +1,98 @@
+{% block sw_settings_captcha_select_v2_multi_select %}
+    {% parent %}
+
+    <sw-container v-if="currentValue.moorlCaptchaTo.isActive">
+        <p class="sw-settings-captcha-select-v2__description">
+            {{ $tc('sw-settings-basic-information.captcha.moorlCaptchaToDescription') }}
+        </p>
+
+        <sw-container columns="repeat(2, 1fr)" gap="0px 15px">
+            <sw-number-field
+                    v-model:value="currentValue.moorlCaptchaTo.config.timeout"
+                    name="moorlCaptchaToTimeout"
+                    :label="$tc('sw-settings-basic-information.captcha.moorlCaptchaToTimeout')"
+            />
+
+            <sw-switch-field
+                    v-model:value="currentValue.moorlCaptchaTo.config.allowRetry"
+                    :bordered="true"
+                    name="moorlCaptchaToAllowRetry"
+                    :label="$tc('sw-settings-basic-information.captcha.moorlCaptchaToAllowRetry')"
+            />
+        </sw-container>
+    </sw-container>
+
+    <sw-container v-if="currentValue.moorlCaptchaBw.isActive">
+        <p class="sw-settings-captcha-select-v2__description">
+            {{ $tc('sw-settings-basic-information.captcha.moorlCaptchaBw.description') }}
+        </p>
+
+        <sw-data-grid
+                :data-source="currentValue.moorlCaptchaBw.config.rules"
+                :columns="moorlCaptchaBwGridColumns"
+                :show-selection="false"
+                :plain-appearance="true"
+                :show-actions="true"
+        >
+            <template #actions="{ item, itemIndex }">
+                <sw-context-menu-item @click="moorlCaptchaBwRegexModalIndex = itemIndex">
+                    {{ $tc('global.default.edit') }}
+                </sw-context-menu-item>
+
+                <sw-context-menu-item
+                        variant="danger"
+                        @click="moorlCaptchaBwDeleteItem(itemIndex)"
+                >
+                    {{ $tc('global.default.delete') }}
+                </sw-context-menu-item>
+            </template>
+        </sw-data-grid>
+
+        <sw-button @click="moorlCaptchaBwAddItem">
+            {{ $tc('global.default.apply') }}
+        </sw-button>
+    </sw-container>
+
+    <sw-modal
+            v-if="moorlCaptchaBwRegexModalIndex !== null"
+            @modal-close="moorlCaptchaBwRegexModalIndex = null"
+            :title="$tc('global.default.edit')"
+    >
+        <sw-checkbox-field
+                v-model:value="currentValue.moorlCaptchaBw.config.rules[moorlCaptchaBwRegexModalIndex].active"
+                :label="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.properties.active')"
+                :placeholder="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.properties.active')"
+                bordered
+        />
+
+        <sw-text-field
+                v-model:value="currentValue.moorlCaptchaBw.config.rules[moorlCaptchaBwRegexModalIndex].name"
+                :label="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.properties.name')"
+                :placeholder="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.properties.name')"
+                :helpText="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.helpText.name')"
+        />
+
+        <sw-text-field
+                v-model:value="currentValue.moorlCaptchaBw.config.rules[moorlCaptchaBwRegexModalIndex].description"
+                :label="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.properties.description')"
+                :placeholder="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.properties.description')"
+        />
+
+        <sw-textarea-field
+                v-model:value="currentValue.moorlCaptchaBw.config.rules[moorlCaptchaBwRegexModalIndex].regex"
+                :label="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.properties.regex')"
+                :placeholder="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.properties.regex')"
+                :helpText="$tc('sw-settings-basic-information.captcha.moorlCaptchaBw.helpText.regex')"
+        />
+
+        <template #modal-footer>
+            <sw-button @click="moorlCaptchaBwRegexModalIndex = null" size="small">
+                {{ $tc('global.default.close') }}
+            </sw-button>
+
+            <sw-button @click="moorlCaptchaBwDeleteItem(moorlCaptchaBwRegexModalIndex)" size="small" variant="danger">
+                {{ $tc('global.default.delete') }}
+            </sw-button>
+        </template>
+    </sw-modal>
+{% endblock %}

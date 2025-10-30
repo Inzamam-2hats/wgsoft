@@ -1,0 +1,54 @@
+{
+  "name": "frosh/platform-html-minify",
+  "keywords": [
+    "shopware",
+    "backend",
+    "html",
+    "minify"
+  ],
+  "description": "This plugin delivers minified HTML and minified inline JavaScript to visitors.",
+  "version": "2.2.0",
+  "type": "shopware-platform-plugin",
+  "license": "mit",
+  "authors": [
+    {
+      "name": "FriendsOfShopware",
+      "homepage": "https://friendsofshopware.de"
+    }
+  ],
+  "require": {
+    "shopware/core": "~6.5.8||~6.6.0||~6.7.0",
+    "mrclay/jsmin-php": "^2.4"
+  },
+  "extra": {
+    "shopware-plugin-class": "Frosh\\HtmlMinify\\FroshPlatformHtmlMinify",
+    "plugin-icon": "src/Resources/config/plugin.png",
+    "label": {
+      "de-DE": "HTML Minify plugin",
+      "en-GB": "HTML Minify plugin"
+    },
+    "description": {
+      "de-DE": "Liefere minimierte HTML-Seiten aus. Zusätzlich kombiniert und minimiert dieses Plugin die JavaScript-Tags im HTML. In den meisten Fällen können Einsparungen von 30 % gemacht werden.",
+      "en-GB": "Deliver minified HTML pages. In addition, this plugin combines and minimizes the JavaScript tags in the HTML. In most cases, savings of 30% can be made."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://github.com/FriendsOfShopware/FroshPlatformHtmlMinify",
+      "en-GB": "https://github.com/FriendsOfShopware/FroshPlatformHtmlMinify"
+    },
+    "supportLink": {
+      "de-DE": "https://github.com/FriendsOfShopware/FroshPlatformHtmlMinify/issues",
+      "en-GB": "https://github.com/FriendsOfShopware/FroshPlatformHtmlMinify/issues"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Frosh\\HtmlMinify\\": "src/"
+    }
+  },
+  "minimum-stability": "RC",
+  "config": {
+    "allow-plugins": {
+      "symfony/runtime": true
+    }
+  }
+}

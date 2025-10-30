@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Settings - Desktop</title>
+        <title lang="de-DE">Einstellungen - Desktop</title>
+        <input-field type="text">
+            <name>desktopText1</name>
+            <label lang="de-DE">1. Eintrag</label>
+            <label>1. item</label>
+            <copyable>true</copyable>
+        </input-field>
+        <input-field type="text">
+            <name>desktopText2</name>
+            <label lang="de-DE">2. Eintrag</label>
+            <label>2. item</label>
+            <copyable>true</copyable>
+        </input-field>
+        <input-field type="text">
+            <name>desktopText3</name>
+            <label lang="de-DE">3. Eintrag</label>
+            <label>3. item</label>
+            <copyable>true</copyable>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Settings - Mobile</title>
+        <title lang="de-DE">Einstellungen - Mobil</title>
+        <input-field type="text">
+            <name>mobileText1</name>
+            <label lang="de-DE">1. Eintrag</label>
+            <label>1. item</label>
+            <copyable>true</copyable>
+        </input-field>
+    </card>
+</config>

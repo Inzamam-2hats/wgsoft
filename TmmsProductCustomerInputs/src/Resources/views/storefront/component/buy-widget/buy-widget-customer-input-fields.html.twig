@@ -1,0 +1,237 @@
+{% if customFields[tmmsCustomerInputFieldtype] == "input" or customFields[tmmsCustomerInputFieldtype] == "number" %}
+    {% block customerinput_input %}
+        <input
+            type="{% if customFields[tmmsCustomerInputFieldtype] == "input" %}text{% elseif customFields[tmmsCustomerInputFieldtype] == "number" %}number{% endif %}"
+            class="form-control tmms-customer-input-value{% if customFields[tmmsCustomerInputRequired] %} tmms-customer-input-is-required{% if tmmsCustomerInputValue == "" %} tmms-customer-input-is-empty{% endif %}{% endif %}{% if not(config('TmmsProductCustomerInputs.config.customerInputEmptyRequiredFieldAreSavedInCheckout')) %} tmms-customer-input-do-not-save-empty-required-field{% endif %}{% if customFields[tmmsCustomerInputFieldtype] == "number" %} is-number-field{% endif %}{% if config('TmmsProductCustomerInputs.config.customerInputBlockEnterKeyForInputTypeText') %} block-enter-key{% endif %}"
+            name="tmms-customer-input-value-{{ tmmsCustomerInputCount }}"
+            id="tmms-customer-input-value-{{ prefix }}{{ productId }}-{{ tmmsCustomerInputCount }}"
+            value="{{ tmmsCustomerInputValue }}"
+            placeholder="{% if customFields[tmmsCustomerInputPlaceholder] %}{{ customFields[tmmsCustomerInputPlaceholder] }}{% else %}{{ "tmms.customerInput.placeholderLabel"|trans|raw }}{% endif %}"
+            data-path="{{ path('frontend.savecustomerinputs.request') }}"
+            {% if customFields[tmmsCustomerInputRequired] and (tmmsRequiredFieldIsPossible == 1 or tmmsRequiredFieldIsPossible == 2) %}
+                form="{{ requiredFormName }}"
+                data-form="{{ requiredFormName }}"
+                required
+            {% else %}
+                {% if customFields[tmmsCustomerInputFieldtype] == "number" %}
+                    data-form="{{ requiredFormName }}"
+                {% endif %}
+            {% endif %}
+            data-save-customer-input="true"
+            {% if customFields[tmmsCustomerInputFieldtype] == "input" %}
+                {% if customFields[tmmsCustomerInputMaxvalue] %}maxlength="{{ customFields[tmmsCustomerInputMaxvalue] }}"{% endif %}
+            {% elseif customFields[tmmsCustomerInputFieldtype] == "number" %}
+                {% if customFields[tmmsCustomerInputMinvalue] %}min="{{ customFields[tmmsCustomerInputMinvalue] }}"{% endif %}
+                {% if customFields[tmmsCustomerInputMaxvalue] %}max="{{ customFields[tmmsCustomerInputMaxvalue] }}"{% endif %}
+                {% if customFields[tmmsCustomerInputStepvalue] %}step="{{ customFields[tmmsCustomerInputStepvalue] }}"{% endif %}
+            {% endif %}
+        />
+    {% endblock %}
+    {% if customFields[tmmsCustomerInputFieldtype] == "number" %}
+        {% if customFields[tmmsCustomerInputMinvalue] and customFields[tmmsCustomerInputMaxvalue] %}
+            <small class="validity">{% if customFields[tmmsCustomerInputStepvalue] %}{{ "tmms.customerInput.validityNumberStepsLabel"|trans({"%minvalue%": customFields[tmmsCustomerInputMinvalue], "%maxvalue%": customFields[tmmsCustomerInputMaxvalue], "%stepvalue%": customFields[tmmsCustomerInputStepvalue]|replace({'.': ','})}) }}{% else %}{{ "tmms.customerInput.validityNumberLabel"|trans({"%minvalue%": customFields[tmmsCustomerInputMinvalue], "%maxvalue%": customFields[tmmsCustomerInputMaxvalue]}) }}{% endif %}</small>
+        {% endif %}
+    {% endif %}
+{% elseif customFields[tmmsCustomerInputFieldtype] == "textarea" %}
+    {% block customerinput_textarea %}
+        <textarea
+            class="form-control tmms-customer-input-value{% if customFields[tmmsCustomerInputRequired] %} tmms-customer-input-is-required{% if tmmsCustomerInputValue == "" %} tmms-customer-input-is-empty{% endif %}{% endif %}{% if not(config('TmmsProductCustomerInputs.config.customerInputEmptyRequiredFieldAreSavedInCheckout')) %} tmms-customer-input-do-not-save-empty-required-field{% endif %}"
+            name="tmms-customer-input-value-{{ tmmsCustomerInputCount }}"
+            id="tmms-customer-input-value-{{ prefix }}{{ productId }}-{{ tmmsCustomerInputCount }}"
+            placeholder="{% if customFields[tmmsCustomerInputPlaceholder] %}{{ customFields[tmmsCustomerInputPlaceholder] }}{% else %}{{ "tmms.customerInput.placeholderLabel"|trans|raw }}{% endif %}"
+            data-path="{{ path('frontend.savecustomerinputs.request') }}"
+            rows="{{ config('TmmsProductCustomerInputs.config.customerInputNumberRowsTextarea') }}"
+            {% if customFields[tmmsCustomerInputRequired] and (tmmsRequiredFieldIsPossible == 1 or tmmsRequiredFieldIsPossible == 2) %}
+                form="{{ requiredFormName }}"
+                data-form="{{ requiredFormName }}"
+                required
+            {% endif %}
+            data-save-customer-input="true"
+            {% if customFields[tmmsCustomerInputMaxvalue] %}maxlength="{{ customFields[tmmsCustomerInputMaxvalue] }}"{% endif %}
+        >{{ tmmsCustomerInputValue }}</textarea>
+    {% endblock %}
+{% elseif customFields[tmmsCustomerInputFieldtype] == "boolean" %}
+    {% block customerinput_checkbox %}
+        <input
+            type="checkbox"
+            class="form-check-input tmms-customer-input-value{% if customFields[tmmsCustomerInputRequired] %} tmms-customer-input-is-required{% if tmmsCustomerInputValue == "" or tmmsCustomerInputValue == 0 %} tmms-customer-input-is-empty{% endif %}{% endif %}{% if not(config('TmmsProductCustomerInputs.config.customerInputEmptyRequiredFieldAreSavedInCheckout')) %} tmms-customer-input-do-not-save-empty-required-field{% endif %}"
+            name="tmms-customer-input-value-{{ tmmsCustomerInputCount }}"
+            id="tmms-customer-input-value-{{ prefix }}{{ productId }}-{{ tmmsCustomerInputCount }}"
+            value="1"
+            {% if tmmsCustomerInputValue == 1 %} checked{% endif %}
+            data-path="{{ path('frontend.savecustomerinputs.request') }}"
+            {% if customFields[tmmsCustomerInputRequired] and (tmmsRequiredFieldIsPossible == 1 or tmmsRequiredFieldIsPossible == 2) %}
+                form="{{ requiredFormName }}"
+                data-form="{{ requiredFormName }}"
+                required
+            {% endif %}
+            data-save-customer-input="true"
+        />
+    {% endblock %}
+    {% block customerinput_checkbox_label %}
+        <label class="form-check-label" for="tmms-customer-input-value-{{ prefix }}{{ productId }}-{{ tmmsCustomerInputCount }}">{% if customFields[tmmsCustomerInputPlaceholder] %}{{ customFields[tmmsCustomerInputPlaceholder] }}{% else %}{{ "tmms.customerInput.placeholderLabel"|trans|raw }}{% endif %}</label>
+    {% endblock %}
+{% elseif customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date" or customFields[tmmsCustomerInputFieldtype] == "time" %}
+    {% set defaultDateValue = '' %}
+    {% set dateTimeFormat = "tmms.customerInput.dateTimeFormat"|trans({"%datetimeformat%": config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat')}) %}
+    {% set dateFormat = "tmms.customerInput.dateFormat"|trans({"%dateformat%": config('TmmsProductCustomerInputs.config.customerInputDateFormat')}) %}
+
+    {% if customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''}) == "today" %}
+        {% set minDateValue = 'today' %}
+    {% elseif "+" in customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''}) %}
+        {% if config('TmmsProductCustomerInputs.config.customerInputCalendarBasedOnLocalization') %}
+            {% set minDateValue = 'now'|date_modify(customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''}))|date(dateFormat) %}
+        {% else %}
+            {% if (customFields[tmmsCustomerInputFieldtype] == "date" and config('TmmsProductCustomerInputs.config.customerInputDateFormat') == "Y-m-d") or (customFields[tmmsCustomerInputFieldtype] == "datetime" and config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') == "Y-m-d H:i") %}
+                {% set minDateValue = 'now'|date_modify(customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''}))|date("Y-m-d") %}
+            {% elseif (customFields[tmmsCustomerInputFieldtype] == "date" and config('TmmsProductCustomerInputs.config.customerInputDateFormat') == "d.m.Y") or (customFields[tmmsCustomerInputFieldtype] == "datetime" and config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') == "d.m.Y H:i") %}
+                {% set minDateValue = 'now'|date_modify(customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''}))|date("d.m.Y") %}
+            {% endif %}
+        {% endif %}
+    {% else %}
+        {% if config('TmmsProductCustomerInputs.config.customerInputCalendarBasedOnLocalization') %}
+            {% set minDateValue = customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''}) %}
+        {% else %}
+            {% if ((customFields[tmmsCustomerInputFieldtype] == "date" and config('TmmsProductCustomerInputs.config.customerInputDateFormat') == "Y-m-d" and "-" in customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''})) or (customFields[tmmsCustomerInputFieldtype] == "datetime" and config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') == "Y-m-d H:i" and "-" in customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''})) or (customFields[tmmsCustomerInputFieldtype] == "date" and config('TmmsProductCustomerInputs.config.customerInputDateFormat') == "d.m.Y" and "." in customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''})) or (customFields[tmmsCustomerInputFieldtype] == "datetime" and config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') == "d.m.Y H:i" and "." in customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''}))) %}
+                {% set minDateValue = customFields[tmmsCustomerInputStartdate]|replace({'[': '', ']': ''}) %}
+            {% else %}
+                {% set minDateValue = '' %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% if config('TmmsProductCustomerInputs.config.customerInputSetStartDateAsDefaultValue') %}
+        {% if(not(tmmsCustomerInputValue)) %}
+            {% set defaultDateValue = minDateValue %}
+        {% endif %}
+    {% endif %}
+
+    {% if customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''}) == "today" %}
+        {% set maxDateValue = 'today' %}
+    {% elseif "+" in customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''}) %}
+        {% if config('TmmsProductCustomerInputs.config.customerInputCalendarBasedOnLocalization') %}
+            {% set maxDateValue = 'now'|date_modify(customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''}))|date(dateFormat) %}
+        {% else %}
+            {% if (customFields[tmmsCustomerInputFieldtype] == "date" and config('TmmsProductCustomerInputs.config.customerInputDateFormat') == "Y-m-d") or (customFields[tmmsCustomerInputFieldtype] == "datetime" and config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') == "Y-m-d H:i") %}
+                {% set maxDateValue = 'now'|date_modify(customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''}))|date("Y-m-d") %}
+            {% elseif (customFields[tmmsCustomerInputFieldtype] == "date" and config('TmmsProductCustomerInputs.config.customerInputDateFormat') == "d.m.Y") or (customFields[tmmsCustomerInputFieldtype] == "datetime" and config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') == "d.m.Y H:i") %}
+                {% set maxDateValue = 'now'|date_modify(customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''}))|date("d.m.Y") %}
+            {% endif %}
+        {% endif %}
+    {% else %}
+        {% if config('TmmsProductCustomerInputs.config.customerInputCalendarBasedOnLocalization') %}
+            {% set maxDateValue = customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''}) %}
+        {% else %}
+            {% if ((customFields[tmmsCustomerInputFieldtype] == "date" and config('TmmsProductCustomerInputs.config.customerInputDateFormat') == "Y-m-d" and "-" in customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''})) or (customFields[tmmsCustomerInputFieldtype] == "datetime" and config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') == "Y-m-d H:i" and "-" in customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''})) or (customFields[tmmsCustomerInputFieldtype] == "date" and config('TmmsProductCustomerInputs.config.customerInputDateFormat') == "d.m.Y" and "." in customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''})) or (customFields[tmmsCustomerInputFieldtype] == "datetime" and config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') == "d.m.Y H:i" and "." in customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''}))) %}
+                {% set maxDateValue = customFields[tmmsCustomerInputEnddate]|replace({'[': '', ']': ''}) %}
+            {% else %}
+                {% set maxDateValue = '' %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% block customerinput_date %}
+        <input
+            type="text"
+            class="form-control tmms-customer-input-value{% if customFields[tmmsCustomerInputRequired] %} tmms-customer-input-is-required{% if tmmsCustomerInputValue == "" %} tmms-customer-input-is-empty{% endif %}{% endif %}{% if not(config('TmmsProductCustomerInputs.config.customerInputEmptyRequiredFieldAreSavedInCheckout')) %} tmms-customer-input-do-not-save-empty-required-field{% endif %}{% if config('TmmsProductCustomerInputs.config.customerInputBlockEnterKeyForInputTypeText') %} block-enter-key{% endif %}"
+            name="tmms-customer-input-value-{{ tmmsCustomerInputCount }}"
+            id="tmms-customer-input-value-{{ prefix }}{{ productId }}-{{ tmmsCustomerInputCount }}"
+            value="{{ tmmsCustomerInputValue }}"
+            data-path="{{ path('frontend.savecustomerinputs.request') }}"
+            {% if customFields[tmmsCustomerInputRequired] and (tmmsRequiredFieldIsPossible == 1 or tmmsRequiredFieldIsPossible == 2) %}
+                form="{{ requiredFormName }}"
+                data-form="{{ requiredFormName }}"
+                required
+            {% endif %}
+            data-save-customer-input="true"
+            data-date-picker="true"
+            data-date-picker-options='{
+                {% if config('TmmsProductCustomerInputs.config.customerInputCalendarBasedOnLocalization') %}"locale": "{{ app.request.locale }}",{% endif %}
+                "dateFormat": "{% if config('TmmsProductCustomerInputs.config.customerInputCalendarBasedOnLocalization') %}{% if customFields[tmmsCustomerInputFieldtype] == "datetime" %}{{ dateTimeFormat }}{% elseif customFields[tmmsCustomerInputFieldtype] == "date" %}{{ dateFormat }}{% elseif customFields[tmmsCustomerInputFieldtype] == "time" %}H:i{% endif %}{% else %}{% if customFields[tmmsCustomerInputFieldtype] == "datetime" %}{{ config('TmmsProductCustomerInputs.config.customerInputDateTimeFormat') }}{% elseif customFields[tmmsCustomerInputFieldtype] == "date" %}{{ config('TmmsProductCustomerInputs.config.customerInputDateFormat') }}{% elseif customFields[tmmsCustomerInputFieldtype] == "time" %}H:i{% endif %}{% endif %}",
+                "enableTime": "{% if customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "time" %}true{% else %}false{% endif %}",
+                {% if customFields[tmmsCustomerInputFieldtype] == "time" %}"noCalendar": "true",{% endif %}
+                {% if (config('TmmsProductCustomerInputs.config.customerInputShowWeeksNumbers') == false) %}"weekNumbers": "false",{% endif %}
+                {% if (config('TmmsProductCustomerInputs.config.customerInputAllowManualInput') == false) %}{% if customFields[tmmsCustomerInputRequired] and (tmmsRequiredFieldIsPossible == 1 or tmmsRequiredFieldIsPossible == 2) %}{% else %}"allowInput": "false",{% endif %}{% endif %}
+                {% if (defaultDateValue != "") %}
+                    "defaultDate": "{{ defaultDateValue }}",
+                {% endif %}
+                {% if (customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date") and (minDateValue != "") %}
+                    "minDate": "{{ minDateValue }}",
+                {% endif %}
+                {% if (customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date") and (maxDateValue != "") %}
+                    "maxDate": "{{ maxDateValue }}",
+                {% endif %}
+                {% if (customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "time") and (customFields[tmmsCustomerInputStarttime]|replace({'[': '', ']': ''}) != "") %}
+                    "minTime": "{{ customFields[tmmsCustomerInputStarttime]|replace({'[': '', ']': ''}) }}",
+                {% endif %}
+                {% if (customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "time") and (customFields[tmmsCustomerInputEndtime]|replace({'[': '', ']': ''}) != "") %}
+                    "maxTime": "{{ customFields[tmmsCustomerInputEndtime]|replace({'[': '', ']': ''}) }}",
+                {% endif %}
+                {% if (customFields[tmmsCustomerInputFieldtype] == "datetime" or customFields[tmmsCustomerInputFieldtype] == "date") and (customFields[tmmsCustomerInputDisableddates]|replace({'[': '', ']': ''}) != "") %}
+                    "disable": [{{ customFields[tmmsCustomerInputDisableddates]|replace({'[': '', ']': ''}) }}],
+                {% endif %}
+                {% if customFields[tmmsCustomerInputDaterange] %}
+                    "mode": "range",
+                {% endif %}
+                "altInput": "false"
+           }'
+        />
+    {% endblock %}
+{% elseif customFields[tmmsCustomerInputFieldtype] == "select" %}
+    {% block customerinput_select %}
+        <select
+            class="form-select tmms-customer-input-value{% if customFields[tmmsCustomerInputRequired] %} tmms-customer-input-is-required{% if tmmsCustomerInputValue == "" %} tmms-customer-input-is-empty{% endif %}{% endif %}{% if not(config('TmmsProductCustomerInputs.config.customerInputEmptyRequiredFieldAreSavedInCheckout')) %} tmms-customer-input-do-not-save-empty-required-field{% endif %}"
+            name="tmms-customer-input-value-{{ tmmsCustomerInputCount }}"
+            id="tmms-customer-input-value-{{ prefix }}{{ productId }}-{{ tmmsCustomerInputCount }}"
+            data-path="{{ path('frontend.savecustomerinputs.request') }}"
+            {% if customFields[tmmsCustomerInputRequired] and (tmmsRequiredFieldIsPossible == 1 or tmmsRequiredFieldIsPossible == 2) %}
+                form="{{ requiredFormName }}"
+                data-form="{{ requiredFormName }}"
+                required
+            {% endif %}
+            data-save-customer-input="true"
+        >
+            {% set selectfieldvalues = customFields[tmmsCustomerInputSelectfieldvalues]|split(',') %}
+
+            <option {% if customFields[tmmsCustomerInputRequired] and (tmmsRequiredFieldIsPossible == 1 or tmmsRequiredFieldIsPossible == 2) %}disabled="disabled" {% endif %}value=""{% if tmmsCustomerInputValue == "" %} selected{% endif %}>
+                {% if customFields[tmmsCustomerInputPlaceholder] %}{{ customFields[tmmsCustomerInputPlaceholder] }}{% else %}{{ "tmms.customerInput.placeholderLabel"|trans|raw }}{% endif %}
+            </option>
+
+            {% for selectfieldvalue in selectfieldvalues %}
+                <option value="{{ selectfieldvalue }}"{% if selectfieldvalue == tmmsCustomerInputValue %} selected{% endif %}>
+                    {{ selectfieldvalue }}
+                </option>
+            {% endfor %}
+        </select>
+    {% endblock %}
+{% endif %}
+
+<input
+    type="hidden"
+    name="tmms-customer-input-count"
+    value="{{ tmmsCustomerInputCount }}"
+/>
+
+<input
+    type="hidden"
+    name="tmms-customer-input-productnumber-{{ tmmsCustomerInputCount }}"
+    value="{{ productNumber }}"
+/>
+
+<input
+    type="hidden"
+    name="tmms-customer-input-label-{{ tmmsCustomerInputCount }}"
+    value="{% if customFields[tmmsCustomerInputTitle] %}{{ customFields[tmmsCustomerInputTitle] }}{% else %}{{ "tmms.customerInput.titleLabel"|trans|raw }}{% endif %}"
+/>
+
+<input
+    type="hidden"
+    name="tmms-customer-input-placeholder-{{ tmmsCustomerInputCount }}"
+    value="{% if customFields[tmmsCustomerInputPlaceholder] %}{{ customFields[tmmsCustomerInputPlaceholder] }}{% else %}{{ "tmms.customerInput.placeholderLabel"|trans|raw }}{% endif %}"
+/>
+
+<input
+    type="hidden"
+    name="tmms-customer-input-fieldtype-{{ tmmsCustomerInputCount }}"
+    value="{{ customFields[tmmsCustomerInputFieldtype] }}"
+/>

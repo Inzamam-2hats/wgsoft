@@ -1,0 +1,98 @@
+{% block sw_order_line_items_grid_grid_columns_label_nested_modal_button %}
+    {% block sw_order_line_items_grid_grid_columns_label_nested_modal_button_inner %}{% endblock %}
+
+    <div class="sw-order-line-items-grid__item-product-inner">
+        {% block sw_order_line_items_grid_grid_columns_label_nested_modal_button_inner_before %}{% endblock %}
+        {% parent() %}
+        {% block sw_order_line_items_grid_grid_columns_label_nested_modal_button_inner_after %}{% endblock %}
+
+{% endblock %}
+
+{% block sw_order_line_items_grid_column_payload_options %}
+        {% block sw_order_line_items_grid_column_payload_options_inner %}{% endblock %}
+
+        {% parent() %}
+    </div>
+
+    {% block sw_order_line_items_grid_column_payload_options_customerinput %}
+        <template v-if="item.customFields && item.customFields !== null && (item.customFields.tmms_customer_input_1_value !== null || item.customFields.tmms_customer_input_2_value !== null || item.customFields.tmms_customer_input_3_value !== null || item.customFields.tmms_customer_input_4_value !== null || item.customFields.tmms_customer_input_5_value !== null)">
+            <div class="sw-order-line-items-grid__item-product-customer-inputs">
+                <div v-if="item.payload.options.length > 0">
+                    &nbsp;
+                </div>
+
+                {% block sw_order_line_items_grid_column_payload_options_customerinput_1 %}
+                    <div v-if="item.customFields.tmms_customer_input_1_value !== null && item.customFields.tmms_customer_input_1_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-1">
+                        <span v-if="item.customFields.tmms_customer_input_1_label">{{ item.customFields.tmms_customer_input_1_label }}</span> <span v-if="item.customFields.tmms_customer_input_1_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_1_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_1_value }})</span><span v-if="item.customFields.tmms_customer_input_1_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_1_value }}"</i></span>
+                    </div>
+                {% endblock %}
+                {% block sw_order_line_items_grid_column_payload_options_customerinput_2 %}
+                    <div v-if="item.customFields.tmms_customer_input_2_value !== null && item.customFields.tmms_customer_input_2_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-2">
+                        <span v-if="item.customFields.tmms_customer_input_2_label">{{ item.customFields.tmms_customer_input_2_label }}</span> <span v-if="item.customFields.tmms_customer_input_2_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_2_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_2_value }})</span><span v-if="item.customFields.tmms_customer_input_2_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_2_value }}"</i></span>
+                    </div>
+                {% endblock %}
+                {% block sw_order_line_items_grid_column_payload_options_customerinput_3 %}
+                    <div v-if="item.customFields.tmms_customer_input_3_value !== null && item.customFields.tmms_customer_input_3_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-3">
+                        <span v-if="item.customFields.tmms_customer_input_3_label">{{ item.customFields.tmms_customer_input_3_label }}</span> <span v-if="item.customFields.tmms_customer_input_3_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_3_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_3_value }})</span><span v-if="item.customFields.tmms_customer_input_3_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_3_value }}"</i></span>
+                    </div>
+                {% endblock %}
+                {% block sw_order_line_items_grid_column_payload_options_customerinput_4 %}
+                    <div v-if="item.customFields.tmms_customer_input_4_value !== null && item.customFields.tmms_customer_input_4_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-4">
+                        <span v-if="item.customFields.tmms_customer_input_4_label">{{ item.customFields.tmms_customer_input_4_label }}</span> <span v-if="item.customFields.tmms_customer_input_4_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_4_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_4_value }})</span><span v-if="item.customFields.tmms_customer_input_4_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_4_value }}"</i></span>
+                    </div>
+                {% endblock %}
+                {% block sw_order_line_items_grid_column_payload_options_customerinput_5 %}
+                    <div v-if="item.customFields.tmms_customer_input_5_value !== null && item.customFields.tmms_customer_input_5_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-5">
+                        <span v-if="item.customFields.tmms_customer_input_5_label">{{ item.customFields.tmms_customer_input_5_label }}</span> <span v-if="item.customFields.tmms_customer_input_5_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_5_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_5_value }})</span><span v-if="item.customFields.tmms_customer_input_5_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_5_value }}"</i></span>
+                    </div>
+                {% endblock %}
+            </div>
+        </template>
+    {% endblock %}
+{% endblock %}
+
+{% block sw_order_line_items_grid_grid_columns_label_content %}
+    <template v-else>
+        {% block sw_order_line_items_grid_grid_columns_label_content_inner %}{% endblock %}
+        <div class="sw-order-line-items-grid__item-label">
+            {% block sw_order_line_items_grid_grid_columns_label_content_inner_label %}
+                {{ item.label }}
+            {% endblock %}
+        </div>
+        {% block sw_order_line_items_grid_grid_columns_label_content_customerinput %}
+            <template v-if="item.customFields && item.customFields !== null && (item.customFields.tmms_customer_input_1_value !== null || item.customFields.tmms_customer_input_2_value !== null || item.customFields.tmms_customer_input_3_value !== null || item.customFields.tmms_customer_input_4_value !== null || item.customFields.tmms_customer_input_5_value !== null)">
+                <div class="sw-order-line-items-grid__item-product-customer-inputs">
+                    <div v-if="item.payload.options.length > 0">
+                        &nbsp;
+                    </div>
+
+                    {% block sw_order_line_items_grid_grid_columns_label_content_customerinput_1 %}
+                        <div v-if="item.customFields.tmms_customer_input_1_value !== null && item.customFields.tmms_customer_input_1_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-1">
+                            <span v-if="item.customFields.tmms_customer_input_1_label">{{ item.customFields.tmms_customer_input_1_label }}</span> <span v-if="item.customFields.tmms_customer_input_1_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_1_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_1_value }})</span><span v-if="item.customFields.tmms_customer_input_1_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_1_value }}"</i></span>
+                        </div>
+                    {% endblock %}
+                    {% block sw_order_line_items_grid_grid_columns_label_content_customerinput_2 %}
+                        <div v-if="item.customFields.tmms_customer_input_2_value !== null && item.customFields.tmms_customer_input_2_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-2">
+                            <span v-if="item.customFields.tmms_customer_input_2_label">{{ item.customFields.tmms_customer_input_2_label }}</span> <span v-if="item.customFields.tmms_customer_input_2_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_2_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_2_value }})</span><span v-if="item.customFields.tmms_customer_input_2_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_2_value }}"</i></span>
+                        </div>
+                    {% endblock %}
+                    {% block sw_order_line_items_grid_grid_columns_label_content_customerinput_3 %}
+                        <div v-if="item.customFields.tmms_customer_input_3_value !== null && item.customFields.tmms_customer_input_3_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-3">
+                            <span v-if="item.customFields.tmms_customer_input_3_label">{{ item.customFields.tmms_customer_input_3_label }}</span> <span v-if="item.customFields.tmms_customer_input_3_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_3_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_3_value }})</span><span v-if="item.customFields.tmms_customer_input_3_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_3_value }}"</i></span>
+                        </div>
+                    {% endblock %}
+                    {% block sw_order_line_items_grid_grid_columns_label_content_customerinput_4 %}
+                        <div v-if="item.customFields.tmms_customer_input_4_value !== null && item.customFields.tmms_customer_input_4_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-4">
+                            <span v-if="item.customFields.tmms_customer_input_4_label">{{ item.customFields.tmms_customer_input_4_label }}</span> <span v-if="item.customFields.tmms_customer_input_4_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_4_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_4_value }})</span><span v-if="item.customFields.tmms_customer_input_4_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_4_value }}"</i></span>
+                        </div>
+                    {% endblock %}
+                    {% block sw_order_line_items_grid_grid_columns_label_content_customerinput_5 %}
+                        <div v-if="item.customFields.tmms_customer_input_5_value !== null && item.customFields.tmms_customer_input_5_value" class="sw-order-line-items-grid__item-product-customer-input sw-order-line-items-grid__item-product-customer-input-5">
+                            <span v-if="item.customFields.tmms_customer_input_5_label">{{ item.customFields.tmms_customer_input_5_label }}</span> <span v-if="item.customFields.tmms_customer_input_5_fieldtype === 'boolean'"><i>"{{ item.customFields.tmms_customer_input_5_placeholder }}"</i> ({{ item.customFields.tmms_customer_input_5_value }})</span><span v-if="item.customFields.tmms_customer_input_5_fieldtype !== 'boolean'"><i>"{{ item.customFields.tmms_customer_input_5_value }}"</i></span>
+                        </div>
+                    {% endblock %}
+                </div>
+            </template>
+        {% endblock %}
+    </template>
+{% endblock %}

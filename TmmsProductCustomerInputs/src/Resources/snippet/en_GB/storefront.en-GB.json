@@ -1,0 +1,19 @@
+{
+    "tmms": {
+        "customerInput": {
+            "titleLabel": "text input:",
+            "placeholderLabel": "please enter a value",
+            "openingRoundBracket": "(",
+            "closedRoundBracket": ")",
+            "selectedValue": "selected",
+            "unselectedValue": "not selected",
+            "requiredLabel": "This field is a required field.",
+            "validityNumberStepsLabel": "The value must be between %minvalue% and %maxvalue% and must be entered in steps of %stepvalue%.",
+            "validityNumberLabel": "The value must be between %minvalue% and %maxvalue%.",
+            "dateTimeFormat": "Y-m-d H:i",
+            "dateFormat": "Y-m-d",
+            "informationMessage": "When the product is added to the shopping cart again, the quantity of the product increases and the previous input is overwritten. If you would like further, different inputs for the same product, please place another order.",
+            "accordionHeadingLabel": "check inputs"
+        }
+    }
+}

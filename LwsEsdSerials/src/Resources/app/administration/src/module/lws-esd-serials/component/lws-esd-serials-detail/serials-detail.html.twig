@@ -1,0 +1,31 @@
+<div>
+    <template v-if="isLoading">
+        <sw-skeleton variant="detail-bold"/>
+        <sw-skeleton/>
+    </template>
+
+    <template v-else>
+
+        {% block lws_esd_serials_detail_base_basic_info_card %}
+
+            <sw-card
+                    position-identifier="serials-detail"
+                    :title="$tc('lws-esd-serials.serials-detail.cardTitle')">
+                <sw-container
+                        columns="1fr"
+                        gap="0px 30px">
+
+                    <sw-textarea-field
+                            v-model:value="entity.serialNumber"
+                            type="textarea"
+                            validation="required"
+                            required></sw-textarea-field>
+
+                </sw-container>
+
+            </sw-card>
+
+        {% endblock %}
+    </template>
+
+</div>

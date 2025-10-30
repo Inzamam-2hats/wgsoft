@@ -1,0 +1,21 @@
+{% sw_extends '@Storefront/storefront/component/line-item/type/product.html.twig' %}
+
+
+{% block component_line_item_type_product_label %}
+
+    {{ parent() }}
+
+    {% if lineItem.extensions
+        && lineItem.extensions.lwsEsdSerials
+        && lineItem.extensions.lwsEsdSerials|length > 0
+        && config('LwsEsdSerials.config.showSerialInAccount')%}
+        <div class="serial-numbers">
+            <div class="serial-numbers-label"><b>{{ "lws-esd-serials.serialNumber"|trans }}:</b></div>
+            {% for serial in lineItem.extensions.lwsEsdSerials %}
+              <div class="serial">{{ serial.serialNumber }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}
+

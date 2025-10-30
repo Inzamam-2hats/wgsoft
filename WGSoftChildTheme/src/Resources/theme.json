@@ -1,0 +1,21 @@
+{
+  "name": "WGSoft-Child-Theme",
+  "author": "WGSoft.de",
+  "views": [
+     "@Storefront",
+     "@Plugins",
+     "@WGSoftChildTheme"
+  ],
+  "style": [
+    "app/storefront/src/scss/overrides.scss",
+    "@Storefront",
+    "app/storefront/src/scss/base.scss"
+  ],
+  "script": [
+    "@Storefront",
+    "app/storefront/dist/storefront/js/w-g-soft-child-theme/w-g-soft-child-theme.js"
+  ],
+  "asset": [
+    "@Storefront"
+  ]
+}

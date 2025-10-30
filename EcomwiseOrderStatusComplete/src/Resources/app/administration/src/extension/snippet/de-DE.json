@@ -1,0 +1,11 @@
+{
+    "orderStatusComplete": {
+        "entity-components": {
+            "doneMessage": "Möchten Sie diese Bestellung wirklich in erledigt ändern? | Möchten Sie diese {count} Bestellungen wirklich in erledigt ändern?",
+            "mainLabel": "als erledigt markieren",
+            "infoMessage": "Massenaktion abgeschlossen",
+            "errorMessage": "Bestellung nicht möglich"
+        }
+    }
+}
+  

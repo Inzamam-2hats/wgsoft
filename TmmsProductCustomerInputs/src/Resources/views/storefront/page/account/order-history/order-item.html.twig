@@ -1,0 +1,83 @@
+{% sw_extends '@Storefront/storefront/page/account/order-history/order-item.html.twig' %}
+
+{% block page_account_order_item_context_menu_reorder_form %}
+    {% block page_account_order_item_context_menu_reorder_form_customerinput_before %}{% endblock %}
+
+    {{ parent() }}
+
+    {% if config('TmmsProductCustomerInputs.config.takeOverCustomerInput') %}
+        {% block page_account_order_item_context_menu_reorder_form_customerinput %}
+            {% for lineItem in order.lineItems %}
+                {% if lineItem.type == PRODUCT_LINE_ITEM_TYPE and lineItem.productId %}
+                    {% block page_account_order_item_context_menu_reorder_form_customerinput_inner %}
+                        {% set tmmsLineItemCustomerInputCountValue = page.tmmsCustomerInputCountValue %}
+
+                        {% for tmmsCustomerInputCount in 1..tmmsLineItemCustomerInputCountValue %}
+                            {% set customFields = lineItem.customFields %}
+                            {% set tmmsLineItemProductCustomFields = tmms_get_product_custom_fields(context, lineItem.productId) %}
+
+                            {% set tmmsCustomerInputActive = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_active' %}
+                            {% set tmmsCustomerInputFieldtype = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_fieldtype' %}
+                            {% set tmmsCustomerInputTitle = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_title' %}
+                            {% set tmmsCustomerInputPlaceholder = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_placeholder' %}
+                            {% set tmmsCustomerInputValue = 'tmms_customer_input_' ~ tmmsCustomerInputCount ~ '_value' %}
+
+                            {% if tmmsLineItemProductCustomFields[tmmsCustomerInputActive] and customFields[tmmsCustomerInputValue] %}
+                                {% block page_account_order_item_context_menu_reorder_form_customerinput_inner_form %}
+                                   <form class="order-item-tmms-customer-input-form" action="{{ path('frontend.savecustomerinputs.request') }}" method="post" data-orderId="{{ order.id }}">
+                                        <input
+                                                type="hidden"
+                                                name="tmms-customer-input-count"
+                                                value="{{ tmmsCustomerInputCount }}"
+                                        />
+
+                                        <input
+                                                type="hidden"
+                                                name="tmms-customer-input-productnumber-{{ tmmsCustomerInputCount }}"
+                                                value="{{ lineItem.payload.productNumber }}"
+                                        />
+
+                                        <input
+                                                type="hidden"
+                                                name="tmms-customer-input-label-{{ tmmsCustomerInputCount }}"
+                                                value="{% if tmmsLineItemProductCustomFields[tmmsCustomerInputTitle] %}{{ tmmsLineItemProductCustomFields[tmmsCustomerInputTitle] }}{% else %}{{ "tmms.customerInput.titleLabel"|trans|raw }}{% endif %}"
+                                        />
+
+                                        <input
+                                                type="hidden"
+                                                name="tmms-customer-input-placeholder-{{ tmmsCustomerInputCount }}"
+                                                value="{% if tmmsLineItemProductCustomFields[tmmsCustomerInputPlaceholder] %}{{ tmmsLineItemProductCustomFields[tmmsCustomerInputPlaceholder] }}{% else %}{{ "tmms.customerInput.placeholderLabel"|trans|raw }}{% endif %}"
+                                        />
+
+                                        <input
+                                                type="hidden"
+                                                name="tmms-customer-input-fieldtype-{{ tmmsCustomerInputCount }}"
+                                                value="{{ tmmsLineItemProductCustomFields[tmmsCustomerInputFieldtype] }}"
+                                        />
+
+                                        <input type="hidden"
+                                               name="tmms-customer-input-value-{{ tmmsCustomerInputCount }}"
+                                               value="{% if customFields[tmmsCustomerInputFieldtype] == "boolean" %}{% if customFields[tmmsCustomerInputValue] === "ausgewählt" or customFields[tmmsCustomerInputValue] === "selected" %}1{% else %}0{% endif %}{% else %}{{ customFields[tmmsCustomerInputValue] }}{% endif %}"
+                                        />
+                                    </form>
+                                {% endblock %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endblock %}
+                {% endif %}
+            {% endfor %}
+        {% endblock %}
+    {% endif %}
+
+    {% block page_account_order_item_context_menu_reorder_form_customerinput_after %}{% endblock %}
+{% endblock %}
+
+{% block page_account_order_item_context_menu_reorder_form_button %}
+    {% block page_account_order_item_context_menu_reorder_form_button_before %}{% endblock %}
+
+    {% if config('TmmsProductCustomerInputs.config.showRepeatOrderButton') %}
+        {{ parent() }}
+    {% endif %}
+
+    {% block page_account_order_item_context_menu_reorder_form_button_after %}{% endblock %}
+{% endblock %}

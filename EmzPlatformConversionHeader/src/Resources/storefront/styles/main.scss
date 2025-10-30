@@ -1,0 +1,42 @@
+@mixin ch-wrapper() {
+    display: flex;
+    background-color: #4C545F;
+    color: color-yiq($primary);
+
+    .container {
+          .ch-item {
+            padding: 10px 0;
+            text-align: center;
+        }
+    }
+}
+
+.ch-mobile-wrapper {
+    @include ch-wrapper();
+}
+
+.ch-desktop-wrapper {
+    display: none;
+}
+
+@include media-breakpoint-up(md) {
+    .ch-mobile-wrapper {
+        display: none;
+    }
+
+    .ch-desktop-wrapper {
+        @include ch-wrapper();
+        height: 20px;
+        padding: 20px 0;
+        
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+    
+            .ch-item {
+                padding: 0;
+            }
+        }
+    }
+}

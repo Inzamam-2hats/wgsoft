@@ -1,0 +1,41 @@
+{
+    "name": "emz/emz-platform-conversion-header",
+    "description": "Der Conversion Header bietet Dir die Möglichkeit, Deinen Besuchern wichtige Informationen am oberen Bildschirmrand zu zeigen.",
+    "version": "v2.1.1",
+    "type": "shopware-platform-plugin",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "8mylez GmbH",
+            "homepage": "https://8mylez.com"
+        }
+    ],
+    "require": {
+        "shopware/core": "*"
+    },
+    "autoload": {
+        "psr-4": {
+                "Emz\\EmzPlatformConversionHeader\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "Emz\\EmzPlatformConversionHeader\\EmzPlatformConversionHeader",
+        "label": {
+            "de-DE": "Conversion Header",
+            "en-GB": "Conversion Header"
+        },
+        "description": {
+            "de-DE": "EmzPlatformConversionHeader",
+            "en-GB": "EmzPlatformConversionHeader"
+        },
+        "copyright": "(c) by 8mylez GmbH",
+        "manufacturerLink": {
+            "de-DE": "https://8mylez.com",
+            "en-GB": "https://8mylez.com"
+        },
+        "supportLink": {
+            "de-DE": "https://8mylez.com/kontakt/",
+            "en-GB": "https://8mylez.com/kontakt/"
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{% sw_extends '@Storefront/storefront/component/review/review-item.html.twig' %}
+
+        {% block component_review_item_meta_author %}
+            <div itemprop="author" itemtype="https://schema.org/Person" itemscope>
+            {% if review.externalUser %}
+<meta itemprop="name" content="{{ review.externalUser }}">
+            {% else %}            
+<meta itemprop="name" content="{{ "Anonym" }}">            
+            {% endif %}
+                
+            </div>
+        {% endblock %}

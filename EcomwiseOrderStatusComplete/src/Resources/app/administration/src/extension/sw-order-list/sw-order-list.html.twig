@@ -1,0 +1,51 @@
+{% block sw_order_list_bulk_selected_actions_content %}
+    <template #bulk>
+        <a
+            v-if="feature.isActive('FEATURE_NEXT_6061') && acl.can('order.editor')"
+            class="link link-primary"
+            @click="showBulkEditModal = true"
+        >
+            {{ $tc('global.sw-bulk-edit-modal.bulkEdit') }}
+        </a>
+
+        <a
+            class="link link-danger"
+            @click="showBulkDoneModal = true"
+        >
+            {{ $tc('orderStatusComplete.entity-components.mainLabel') }}
+        </a>
+
+        <sw-modal
+            v-if="showBulkDoneModal"
+            variant="small"
+            :title="$tc('global.default.warning')"
+            @modal-close="showBulkDoneModal = false"
+        >
+            <p class="sw-data-grid__confirm-bulk-delete-text">
+                {{ $tc('orderStatusComplete.entity-components.doneMessage', selectionCount, { count: selectionCount }) }}
+            </p>
+
+            <template #modal-footer>
+                <slot name="bulk-modal-cancel">
+                    <sw-button
+                        size="small"
+                        @click="showBulkDoneModal = false"
+                    >
+                        {{ $tc('global.default.cancel') }}
+                    </sw-button>
+                </slot>
+
+                <slot name="bulk-modal-done-orders">
+                    <sw-button
+                        variant="danger"
+                        size="small"
+                        :is-loading="isBulkLoading"
+                        @click="doneOrders"
+                    >
+                        {{ $tc('orderStatusComplete.entity-components.mainLabel') }}
+                    </sw-button>
+                </slot>
+            </template>
+        </sw-modal>
+    </template>
+{% endblock %}

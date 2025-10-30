@@ -1,0 +1,53 @@
+{
+    "name": "dne/template-manager",
+    "description": "Custom Template Manager",
+    "version": "3.0.0",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~v6.6.0"
+    },
+    "authors": [
+        {
+            "name": "Open Source Plugins"
+        }
+    ],
+    "extra": {
+        "shopware-plugin-class": "Dne\\TemplateManager\\DneTemplateManager",
+        "copyright": "(c) David Neustadt",
+        "label": {
+            "de-DE": "Custom Template Manager",
+            "en-GB": "Custom Template Manager"
+        },
+        "description": {
+            "de-DE": "Templates in der Administration bearbeiten",
+            "en-GB": "Edit templates within the administration"
+        },
+        "manufacturerLink": {
+            "de-DE": "https://store.shopware.com/open-source-plugins.html",
+            "en-GB": "https://store.shopware.com/en/open-source-plugins.html"
+        },
+        "supportLink": {
+            "de-DE": "https://github.com/dneustadt",
+            "en-GB": "https://github.com/dneustadt"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Dne\\TemplateManager\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dne\\TemplateManager\\Test\\": "tests/"
+        }
+    },
+    "suggest": {
+        "shopware/storefront": "Require '6.5'.",
+        "shopware/administration": "Require '6.5'. Allows you to to set up the plugin easily"
+    },
+    "conflict": {
+        "shopware/storefront": "<6,>=7",
+        "shopware/administration": "<6,>=7"
+    }
+}

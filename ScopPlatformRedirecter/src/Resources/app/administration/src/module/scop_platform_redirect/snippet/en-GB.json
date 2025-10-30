@@ -1,0 +1,73 @@
+{
+  "scopplatformredirecter": {
+    "general": {
+      "title": "Redirects",
+      "errorTitle": "Error"
+    },
+    "list": {
+      "columnSourceUrl": "Source URL",
+      "columnTargetUrl": "Target URL",
+      "columnHttpCode": "HTTP Status Code",
+      "columnEnabled": "Enabled",
+      "columnQueryParamsHandling": "Query Parameter Handling",
+      "createButton": "Add Redirect",
+      "exportAllButton": "Export All",
+      "importButton": "Import",
+      "faqButton": {
+        "text": "FAQ",
+        "link": "https://scope01.com/en/shopware-redirect-plugin/"
+      },
+      "fileNotCreated": "The file could not be created",
+      "fileNotImported": "The file could not be imported",
+      "invalidFile": "Invalid File (It must be a .csv file)",
+      "invalidCsvFile": "Invalid .csv File",
+      "importDone": "Import finished",
+      "fileImportedNoSkip": "{amount} Redirects where imported",
+      "fileImported": "{amount} Redirects where imported.<br>{skipped} Redirects where not imported because they already existed and should not be overridden",
+      "fileImportedError": "{amount} Redirects where imported.<br>{skipped} Redirects where not imported because they already existed and should not be overridden.<br><b>{error} Redirects in this file are invalid!</b>",
+      "importModal": {
+        "title": "Import",
+        "cancel": "Cancel",
+        "start": "Import"
+      },
+      "exportModal": {
+        "title": "Export",
+        "cancel": "Cancel",
+        "start": "Export"
+      },
+      "queryParamsHandlingValues": {
+        "0": "Consider",
+        "1": "Ignore",
+        "2": "Transfer"
+      },
+      "salesChannel": "Sales Channel",
+      "allSalesChannels": "All"
+    },
+    "detail": {
+      "sourceUrlLabel": "Source URL",
+      "targetUrlLabel": "Target URL",
+      "httpCodeLabel": "HTTP Status Code",
+      "enabledLabel": "Enabled",
+      "queryParamsHandling": "Query Parameter Handling",
+      "queryParamsHandlingValues": {
+        "consider": "Consider Query Parameters during search",
+        "ignore": "Ignore Query Parameters during search",
+        "transfer": "Ignore Query Parameters during search and add them to the target URL"
+      },
+      "cancelButton": "Cancel",
+      "saveButton": "Save",
+      "errorSameUrlDescription": "The source URL and target URL must not be the same",
+      "errorEmptySourceURL": "The source URL mustn't be empty",
+      "errorEmptyTargetURL": "The target URL mustn't be empty",
+      "helpHere": "here",
+      "httpCodeLabelValues": {
+        "301": "301 (Moved Permanently)",
+        "302": "302 (Moved Temporarily)"
+      },
+      "salesChannel": {
+        "select": "Sales Channel",
+        "all": "All Sales Channels"
+      }
+    }
+  }
+}
