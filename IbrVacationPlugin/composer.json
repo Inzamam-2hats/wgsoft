@@ -1,0 +1,35 @@
+{
+    "name": "ibr/vacation-plugin",
+    "description": "Shop im Urlaub",
+    "version": "v1.1.1",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "IT-Beratung Richter"
+        }
+    ],
+    "require": {
+        "shopware/core": "^6.5"
+    },
+    "extra": {
+        "shopware-plugin-class": "Ibr\\IbrVacationPlugin\\IbrVacationPlugin",
+        "label": {
+            "de-DE": "Vacation Plugin",
+            "en-GB": "Vacation Plugin"
+        },
+        "description": {
+            "de-DE": "Urlaubsinformation im Shop anzeigen",
+            "en-GB": "Show holiday information in the shop"
+        },
+        "manufacturerLink": {
+            "de-DE": "https://www.it-beratung-richter.de/",
+            "en-GB": "https://www.it-beratung-richter.de/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Ibr\\IbrVacationPlugin\\": "src/"
+        }
+    }
+}

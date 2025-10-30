@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title lang="de-DE">Allgemein</title>
+        <title lang="en-GB">General</title>
+        <input-field type="bool">
+            <name>vacation</name>
+            <label lang="de-DE">Aktiviere den Urlaubsmodus</label>
+            <label lang="en-GB">Activate the holiday mode</label>
+        </input-field>
+        <input-field type="date">
+            <name>vacationFrom</name>
+            <label lang="de-DE">Urlaub beginnt am</label>
+            <label lang="en-GB">Holiday starts on</label>
+        </input-field>
+        <input-field type="date">
+            <name>vacationTo</name>
+            <label lang="de-DE">Urlaub endet am</label>
+            <label lang="en-GB">Holiday ends on</label>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Top-Bar</title>
+        <input-field type="bool">
+            <name>showTopBar</name>
+            <label lang="de-DE">Top-Bar anzeigen</label>
+            <label lang="en-GB">Show Top-Bar</label>
+            <defaultValue>true</defaultValue>
+            <helpText lang="de-DE">Die Urlaubsinformation ist im gesamten Shop sichtbar.</helpText>
+            <helpText lang="en-GB">The holiday information is visible throughout the shop.</helpText>
+        </input-field>
+        <input-field>
+            <name>topbarText</name>
+            <label lang="de-DE">Text für Top-Bar</label>
+            <label lang="en-GB">Text for Top-Bar</label>
+            <defaultValue>Wir sind im Urlaub</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Info-Text</title>
+        <input-field type="bool">
+            <name>deliveryTime</name>
+            <label lang="de-DE">Lieferzeit anzeigen</label>
+            <label lang="en-GB">Show delivery time</label>
+            <helpText lang="de-DE">Die Lieferzeit wird in den Produktdetails angezeigt.</helpText>
+            <helpText lang="en-GB">The delivery time is shown in the product details.</helpText>
+        </input-field>
+        <input-field type="bool">
+            <name>vacationCart</name>
+            <label lang="de-DE">im Warenkorb anzeigen</label>
+            <label lang="en-GB">show in shopping cart</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+        <input-field type="bool">
+            <name>vacationCheckout</name>
+            <label lang="de-DE">beim Checkout anzeigen</label>
+            <label lang="en-GB">Show at checkout</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+        <component name="sw-text-editor">
+            <name>vacationText</name>
+            <label lang="de-DE">Urlaubsinformation</label>
+            <label lang="en-GB">Holiday information</label>
+            <defaultValue>Bitte beachten Sie, dass wir uns in der Zeit vom {$1} bis {$2} im Betriebsurlaub befinden. Bestellungen können daher erst wieder nach dem {$2} bearbeitet werden. Wir danken für Ihr Verständnis.</defaultValue>
+        </component>
+    </card>
+    
+</config>

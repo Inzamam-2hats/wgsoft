@@ -1,0 +1,18 @@
+{% sw_extends '@Storefront/storefront/component/buy-widget/buy-widget.html.twig' %}
+
+{% block buy_widget_delivery_informations %}
+    {% if config("IbrVacationPlugin.config.vacation") and 
+        "now"|date('Y-m-d') >= config("IbrVacationPlugin.config.vacationFrom")|date('Y-m-d') and
+            "now"|date('Y-m-d') <= config("IbrVacationPlugin.config.vacationTo")|date('Y-m-d') %}
+        {% if config("IbrVacationPlugin.config.deliveryTime") %}
+            {{ parent() }}
+        {% endif %}    
+        <div class="vacation-text">
+            {{ config("IbrVacationPlugin.config.vacationText")|replace({
+                '{$1}': config("IbrVacationPlugin.config.vacationFrom")|date("d.m.Y"),
+                '{$2}': config("IbrVacationPlugin.config.vacationTo")|date("d.m.Y")})|raw }}
+        </div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
