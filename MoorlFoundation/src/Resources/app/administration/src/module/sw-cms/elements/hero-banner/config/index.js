@@ -1,34 +1,38 @@
-const { Component, Mixin } = Shopware;
-
 import template from './index.html.twig';
 
-Component.register('sw-cms-el-config-moorl-hero-banner', {
+Shopware.Component.register('sw-cms-el-config-moorl-hero-banner', {
     template,
 
-    mixins: [
-        Mixin.getByName('cms-element')
-    ],
+    mixins: [Shopware.Mixin.getByName('cms-element')],
 
     inject: ['repositoryFactory'],
 
     data() {
         return {
             mediaModalIsOpen: false,
-            initialFolderId: null
+            initialFolderId: null,
         };
     },
 
     computed: {
+        assetFilter() {
+            return Shopware.Filter.getByName('asset');
+        },
+
         mediaRepository() {
             return this.repositoryFactory.create('media');
         },
 
         uploadTag() {
-            return this.element.id
+            return this.element.id;
         },
 
         previewSource() {
-            if (this.element.data && this.element.data.media && this.element.data.media.id) {
+            if (
+                this.element.data &&
+                this.element.data.media &&
+                this.element.data.media.id
+            ) {
                 return this.element.data.media;
             }
 
@@ -39,16 +43,16 @@ Component.register('sw-cms-el-config-moorl-hero-banner', {
             return [
                 {
                     value: 'flex-start',
-                    label: `sw-cms.elements.moorl-cta-banner.label.start`
+                    label: `moorl-foundation.field.start`,
                 },
                 {
                     value: 'center',
-                    label: `sw-cms.elements.moorl-cta-banner.label.center`
+                    label: `moorl-foundation.field.center`,
                 },
                 {
                     value: 'flex-end',
-                    label: `sw-cms.elements.moorl-cta-banner.label.end`
-                }
+                    label: `moorl-foundation.field.end`,
+                },
             ];
         },
 
@@ -56,16 +60,16 @@ Component.register('sw-cms-el-config-moorl-hero-banner', {
             return [
                 {
                     value: 'left',
-                    label: `sw-cms.elements.moorl-cta-banner.label.left`
+                    label: `moorl-foundation.field.left`,
                 },
                 {
                     value: 'center',
-                    label: `sw-cms.elements.moorl-cta-banner.label.center`
+                    label: `moorl-foundation.field.center`,
                 },
                 {
                     value: 'right',
-                    label: `sw-cms.elements.moorl-cta-banner.label.right`
-                }
+                    label: `moorl-foundation.field.right`,
+                },
             ];
         },
 
@@ -73,16 +77,16 @@ Component.register('sw-cms-el-config-moorl-hero-banner', {
             return [
                 {
                     value: 'top',
-                    label: `sw-cms.elements.moorl-cta-banner.label.top`
+                    label: `moorl-foundation.field.top`,
                 },
                 {
                     value: 'center',
-                    label: `sw-cms.elements.moorl-cta-banner.label.center`
+                    label: `moorl-foundation.field.center`,
                 },
                 {
                     value: 'bottom',
-                    label: `sw-cms.elements.moorl-cta-banner.label.bottom`
-                }
+                    label: `moorl-foundation.field.bottom`,
+                },
             ];
         },
 
@@ -90,16 +94,16 @@ Component.register('sw-cms-el-config-moorl-hero-banner', {
             return [
                 {
                     value: 'cover',
-                    label: `sw-cms.elements.moorl-cta-banner.label.cover`
+                    label: `moorl-foundation.field.cover`,
                 },
                 {
                     value: 'contain',
-                    label: `sw-cms.elements.moorl-cta-banner.label.contain`
+                    label: `moorl-foundation.field.contain`,
                 },
                 {
                     value: 'custom',
-                    label: `sw-cms.elements.moorl-cta-banner.label.custom`
-                }
+                    label: `moorl-foundation.field.custom`,
+                },
             ];
         },
     },
@@ -118,7 +122,10 @@ Component.register('sw-cms-el-config-moorl-hero-banner', {
         },
 
         async onImageUpload({ targetId }) {
-            const mediaEntity = await this.mediaRepository.get(targetId, Shopware.Context.api);
+            const mediaEntity = await this.mediaRepository.get(
+                targetId,
+                Shopware.Context.api
+            );
 
             this.element.config.media.value = mediaEntity.id;
 
@@ -132,8 +139,8 @@ Component.register('sw-cms-el-config-moorl-hero-banner', {
         },
 
         updateElementData(media = null) {
-            this.$set(this.element.data, 'mediaId', media === null ? null : media.id);
-            this.$set(this.element.data, 'media', media);
+            this.element.data.mediaId = media === null ? null : media.id;
+            this.element.data.media = media;
 
             this.$emit('element-update', this.element);
         },
@@ -146,8 +153,8 @@ Component.register('sw-cms-el-config-moorl-hero-banner', {
             this.element.config.media.value = mediaEntity[0].id;
 
             if (this.element.data) {
-                this.$set(this.element.data, 'mediaId', mediaEntity[0].id);
-                this.$set(this.element.data, 'media', mediaEntity[0]);
+                this.element.data.mediaId = mediaEntity[0].id;
+                this.element.data.media = mediaEntity[0];
             }
 
             this.$emit('element-update', this.element);
@@ -155,6 +162,6 @@ Component.register('sw-cms-el-config-moorl-hero-banner', {
 
         onOpenMediaModal() {
             this.mediaModalIsOpen = true;
-        }
-    }
+        },
+    },
 });

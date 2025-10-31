@@ -1,30 +1,30 @@
-const {Component, Mixin, EntityDefinition, State} = Shopware;
-const {ShopwareError} = Shopware.Classes;
-const {isEmpty} = Shopware.Utils.types;
-const {snakeCase} = Shopware.Utils.string;
+const { isEmpty } = Shopware.Utils.types;
+const { snakeCase } = Shopware.Utils.string;
 
-Mixin.register('moorl-flow-action-helper', {
+Shopware.Mixin.register('moorl-flow-action-helper', {
     computed: {
         triggerEvent() {
-            return State.get('swFlowState').triggerEvent;
+            return Store.get('swFlowState').triggerEvent;
         },
 
         dataSelection() {
             return this.getEntityProperty(this.triggerEvent.data);
-        }
+        },
     },
 
     methods: {
         isExistData(item) {
-            return this.dataSelection.find(data => item === data.value);
+            return this.dataSelection.find((data) => item === data.value);
         },
 
         generateParams: function (params) {
             if (isEmpty(params)) {
-                return [{
-                    name: '',
-                    data: '',
-                }];
+                return [
+                    {
+                        name: '',
+                        data: '',
+                    },
+                ];
             }
 
             const result = Object.entries(params).map(([key, value]) => {
@@ -38,13 +38,13 @@ Mixin.register('moorl-flow-action-helper', {
                 };
             });
 
-            return [...result, {data: '', name: ''}];
+            return [...result, { data: '', name: '' }];
         },
 
         convertParams(data) {
             const query = {};
 
-            data.forEach(item => {
+            data.forEach((item) => {
                 if (!item.name) {
                     return;
                 }
@@ -62,7 +62,7 @@ Mixin.register('moorl-flow-action-helper', {
         getEntityProperty(data) {
             const entities = [];
 
-            Object.keys(data).forEach(key => {
+            Object.keys(data).forEach((key) => {
                 if (data[key].type === 'entity') {
                     entities.push(key);
                 }
@@ -70,21 +70,27 @@ Mixin.register('moorl-flow-action-helper', {
 
             return entities.reduce((result, entity) => {
                 const entityName = this.convertCamelCaseToSnakeCase(entity);
-                const properties = EntityDefinition.get(entityName).filterProperties(property => {
-                    return EntityDefinition.getScalarTypes().includes(property.type);
+                const properties = Shopware.EntityDefinition.get(
+                    entityName
+                ).filterProperties((property) => {
+                    return Shopware.EntityDefinition.getScalarTypes().includes(
+                        property.type
+                    );
                 });
 
-                return result.concat(Object.keys(properties).map(property => {
-                    return {
-                        value: `${entity}.${property}`,
-                        label: `${entity}.${property}`,
-                    };
-                }));
+                return result.concat(
+                    Object.keys(properties).map((property) => {
+                        return {
+                            value: `${entity}.${property}`,
+                            label: `${entity}.${property}`,
+                        };
+                    })
+                );
             }, []);
         },
 
         convertCamelCaseToSnakeCase(camelCaseText) {
             return snakeCase(camelCaseText);
-        }
+        },
     },
 });

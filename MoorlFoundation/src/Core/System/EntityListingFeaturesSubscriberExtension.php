@@ -268,9 +268,9 @@ class EntityListingFeaturesSubscriberExtension
         return new FilterCollection();
     }
 
-    protected function getTagFilter(Request $request): Filter
+    protected function getTagFilter(Request $request, ?array $defaultIds = null): Filter
     {
-        $ids = $this->getPropIds($request, "tag");
+        $ids = $this->getPropIds($request, "tag", $defaultIds);
 
         return new Filter(
             'tag',
@@ -341,6 +341,11 @@ class EntityListingFeaturesSubscriberExtension
             new EqualsAnyFilter($this->entityName . '.categories.id', $ids),
             $ids
         );
+    }
+
+    protected function getChildCategoryFilterV2(Request $request, SalesChannelContext $salesChannelContext): Filter
+    {
+        return  $this->getChildCategoryFilter($request, $this->getNavigationId($request, $salesChannelContext));
     }
 
     protected function getNavigationFilter(Request $request): Filter
@@ -500,5 +505,19 @@ class EntityListingFeaturesSubscriberExtension
         }
 
         return array_filter((array) $ids);
+    }
+
+    private function getNavigationId(Request $request, SalesChannelContext $salesChannelContext): string
+    {
+        if ($navigationId = $request->get('navigationId')) {
+            return $navigationId;
+        }
+
+        $params = $request->attributes->get('_route_params');
+        if ($params && isset($params['navigationId'])) {
+            return $params['navigationId'];
+        }
+
+        return $salesChannelContext->getSalesChannel()->getNavigationCategoryId();
     }
 }

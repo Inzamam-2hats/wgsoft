@@ -1,34 +1,35 @@
-const {Component, Mixin} = Shopware;
-
 import template from './index.html.twig';
 
-Component.register('moorl-demo-data-index', {
+Shopware.Component.register('moorl-demo-data-index', {
     template,
 
-    inject: [
-        'repositoryFactory',
-        'acl',
-        'foundationApiService'
-    ],
+    inject: ['repositoryFactory', 'acl', 'foundationApiService'],
 
     mixins: [
-        Mixin.getByName('notification'),
-        Mixin.getByName('placeholder')
+        Shopware.Mixin.getByName('notification'),
+        Shopware.Mixin.getByName('placeholder'),
     ],
 
     data() {
         return {
-            item: {
-                salesChannelId: null,
-                pluginName: null,
-                name: null,
-            },
+            test: null,
+            salesChannelId: null,
             confirmed: false,
             optionIndex: 0,
-            options: null,
+            options: [],
             isLoading: true,
-            processSuccess: false
+            processSuccess: false,
         };
+    },
+
+    computed: {
+        currentOption() {
+            const option = this.options[this.optionIndex];
+
+            option.salesChannelId = this.salesChannelId;
+
+            return option;
+        },
     },
 
     created() {
@@ -36,74 +37,97 @@ Component.register('moorl-demo-data-index', {
     },
 
     methods: {
-        selectOption(index) {
-            if (typeof index == 'undefined') {
-                index = this.optionIndex;
-            }
-
-            this.item.pluginName = this.options[index].pluginName;
-            this.item.name = this.options[index].name;
-            this.item.type = this.options[index].type;
-        },
-
         getOptions() {
             this.isLoading = true;
 
-            this.foundationApiService.get(`/moorl-foundation/settings/demo-data/options`).then(response => {
-                this.options = response;
-                this.isLoading = false;
+            this.foundationApiService
+                .get(`/moorl-foundation/settings/demo-data/options`)
+                .then((response) => {
+                    if (response.length === 0) {
+                        return;
+                    }
 
-                if (response.length === 0) {
-                    return;
-                }
+                    response.forEach((option) => {
+                        let label;
+                        if (option.type === 'data') {
+                            label = `${this.$tc('moorl-demo-data.baseData')} | ${option.pluginName}`;
+                        } else {
+                            label = `${this.$tc('moorl-demo-data.standardDemo')} | ${option.pluginName} | ${option.name}`;
+                        }
 
-                this.selectOption(0);
-            }).catch((exception) => {
-                this.createNotificationError({
-                    title: this.$tc('global.default.error'),
-                    message: exception,
+                        this.options.push({
+                            label: label,
+                            value: this.options.length,
+                            pluginName: option.pluginName,
+                            name: option.name,
+                            type: option.type,
+                        });
+                    });
+
+                    this.isLoading = false;
+                })
+                .catch((exception) => {
+                    this.createNotificationError({
+                        title: this.$tc('global.default.error'),
+                        message: exception,
+                    });
+
+                    this.isLoading = false;
                 });
-
-                this.isLoading = false;
-            });
         },
 
         install() {
             this.isLoading = true;
 
-            this.foundationApiService.post(`/moorl-foundation/settings/demo-data/install`, this.item).then(response => {
-                this.createNotificationSuccess({
-                    message: this.$tc('moorl-foundation-settings-demo-data.installed')
-                });
+            this.foundationApiService
+                .post(
+                    `/moorl-foundation/settings/demo-data/install`,
+                    this.currentOption
+                )
+                .then(() => {
+                    this.createNotificationSuccess({
+                        message: this.$tc(
+                            'moorl-demo-data.installed'
+                        ),
+                    });
 
-                this.isLoading = false;
-            }).catch((exception) => {
-                this.createNotificationError({
-                    title: this.$tc('global.default.error'),
-                    message: exception,
-                });
+                    this.isLoading = false;
+                })
+                .catch((exception) => {
+                    this.createNotificationError({
+                        title: this.$tc('global.default.error'),
+                        message: exception,
+                    });
 
-                this.isLoading = false;
-            });
+                    this.isLoading = false;
+                });
         },
 
         remove() {
             this.isLoading = true;
 
-            this.foundationApiService.post(`/moorl-foundation/settings/demo-data/remove`, this.item).then(response => {
-                this.createNotificationSuccess({
-                    message: this.$tc('moorl-foundation-settings-demo-data.removed')
-                });
+            this.foundationApiService
+                .post(
+                    `/moorl-foundation/settings/demo-data/remove`,
+                    this.currentOption
+                )
+                .then(() => {
+                    this.createNotificationSuccess({
+                        message: this.$tc(
+                            'moorl-demo-data.removed'
+                        ),
+                    });
 
-                this.isLoading = false;
-            }).catch((exception) => {
-                this.createNotificationError({
-                    title: this.$tc('global.default.error'),
-                    message: exception,
-                });
+                    this.isLoading = false;
+                })
+                .catch((exception) => {
+                    this.createNotificationError({
+                        title: this.$tc('global.default.error'),
+                        message: exception,
+                    });
 
-                this.isLoading = false;
-            });
-        }
-    }
+                    this.isLoading = false;
+                });
+        },
+    },
 });

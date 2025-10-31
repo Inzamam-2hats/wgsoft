@@ -1,0 +1,12 @@
+.nav-main {
+    position: relative;
+    .main-navigation-menu {
+        position: unset;
+        .dropdown-menu {
+            left: 0;
+            top: 45px;
+            border: 0;
+            box-shadow: 0 43px 43px -6px rgba(0, 0, 0, 0.2);
+        }
+      }
+}

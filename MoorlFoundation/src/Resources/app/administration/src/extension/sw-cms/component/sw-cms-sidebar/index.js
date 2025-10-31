@@ -1,15 +1,11 @@
-const {Component} = Shopware;
-const {cloneDeep} = Shopware.Utils.object;
-const types = Shopware.Utils.types;
-
 import template from './sw-cms-sidebar.html.twig';
 
-Component.override('sw-cms-sidebar', {
+Shopware.Component.override('sw-cms-sidebar', {
     template,
 
     methods: {
         isSectionGrid(section) {
-            return (section.type === 'moorl-grid');
+            return section.type === 'moorl-grid';
         },
 
         isSectionGridInitialized(section) {
@@ -22,7 +18,10 @@ Component.override('sw-cms-sidebar', {
             if (!section.customFields.moorl_section_grid_config) {
                 return false;
             }
-            if (!section.customFields.moorl_section_grid_config[0]?.value?.xl?.width) {
+            if (
+                !section.customFields.moorl_section_grid_config[0]?.value?.xl
+                    ?.width
+            ) {
                 return false;
             }
             return true;
@@ -33,14 +32,19 @@ Component.override('sw-cms-sidebar', {
         },
 
         sectionColumnCount(section) {
-            return parseInt(section.customFields.moorl_section_column_count, 10);
+            return parseInt(
+                section.customFields.moorl_section_column_count,
+                10
+            );
         },
 
         getSectionGridContentBlocks(sectionBlocks, gridCol) {
             const sectionPosition = 'moorl_grid_' + (gridCol - 1);
 
             return sectionBlocks.filter(
-                (block) => this.blockTypeExists(block.type) && block.sectionPosition === sectionPosition
+                (block) =>
+                    this.blockTypeExists(block.type) &&
+                    block.sectionPosition === sectionPosition
             );
         },
 
@@ -48,7 +52,7 @@ Component.override('sw-cms-sidebar', {
             return {
                 delay: 300,
                 dragGroup: 'cms-navigator',
-                data: {block, sectionIndex, gridCol},
+                data: { block, sectionIndex, gridCol },
                 validDragCls: null,
                 onDragEnter: this.onBlockDragSort,
                 onDrop: this.onBlockDragStop,
@@ -60,9 +64,9 @@ Component.override('sw-cms-sidebar', {
 
             return {
                 dragGroup: 'cms-navigator',
-                data: {block, sectionIndex, gridCol},
+                data: { block, sectionIndex, gridCol },
                 onDrop: this.onBlockDropAbort,
             };
-        }
+        },
     },
 });

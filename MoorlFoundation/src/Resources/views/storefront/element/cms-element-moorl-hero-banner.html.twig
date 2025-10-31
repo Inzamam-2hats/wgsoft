@@ -109,6 +109,7 @@
                         {% if config.categoryId.value %}
                             <form
                                     name="{{ element.type }}-filter-form"
+                                    class="{{ element.type }}-filter-form"
                                     method="get"
                                     action="{{ seoUrl('frontend.navigation.page', { navigationId: config.categoryId.value }) }}"
                             >
@@ -123,6 +124,9 @@
                                         wrapper: 'col-auto',
                                         unit: "moorl-foundation.listing.filter.#{config('MoorlFoundation.config.osmUnitOfMeasurement')}"
                                     } %}
+                                    {% if config('MoorlFoundation.config.filterRadiusPersist') %}
+                                        <input type="hidden" value="true" name="radius-persist">
+                                    {% endif %}
                                     <div class="col-auto d-flex">
                                         <button
                                                 type="submit"

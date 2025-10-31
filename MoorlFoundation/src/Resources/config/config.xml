@@ -63,6 +63,14 @@
         <title>Animation</title>
         <title lang="de-DE">Animation</title>
 
+        <input-field type="text">
+            <name>moorlAnimationZIndex</name>
+            <label>Z-Index of animated items</label>
+            <label lang="de-DE">Z-Index der animierten Elemente</label>
+            <defaultValue>9000</defaultValue>
+            <placeholder>9000</placeholder>
+        </input-field>
+
         <component name="moorl-animation">
             <name>moorlAnimation</name>
         </component>
@@ -238,7 +246,7 @@
         <input-field>
             <name>osmTileLayer</name>
             <label>URL for tile layer</label>
-            <label lang="de-DE">URL Für Kachel-Ebene</label>
+            <label lang="de-DE">URL für Kachel-Ebene</label>
             <defaultValue><![CDATA[https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png]]></defaultValue>
             <placeholder><![CDATA[https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png]]></placeholder>
         </input-field>
@@ -258,7 +266,7 @@
             <options>
                 <option>
                     <id>scrollWheelZoom</id>
-                    <name>Zoom with scrollwheel</name>
+                    <name>Zoom with scroll wheel</name>
                     <name lang="de-DE">Mit Mausrad zoomen</name>
                 </option>
                 <option>
@@ -412,6 +420,13 @@
             <defaultValue>10</defaultValue>
             <placeholder>10</placeholder>
         </input-field>
+
+        <input-field type="bool">
+            <name>filterRadiusPersist</name>
+            <label>Optional persistant radius filter via cookie</label>
+            <label lang="de-DE">Optionaler dauerhafter Radius Filter über Cookie</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
     </card>
 
     <card>
@@ -503,37 +518,30 @@
         </input-field>
 
         <input-field type="bool">
-            <name>cmsElements</name>
-            <label>Remove CMS elements when uninstalling</label>
-            <label lang="de-DE">CMS Elemente beim deinstallieren entfernen</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>mailTemplates</name>
-            <label>Remove/Refresh email templates when uninstalling/activating</label>
-            <label lang="de-DE">Entfernen/Erneuern von E-Mail Templates beim Deinstallieren/Aktivieren</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>customFields</name>
-            <label>Remove/Refresh custom fields when uninstalling/activating</label>
-            <label lang="de-DE">Entfernen/Erneuern von Freitextfeldern beim Deinstallieren/Aktivieren</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>snippets</name>
-            <label>Remove/Refresh snippets when uninstalling/activating</label>
-            <label lang="de-DE">Entfernen/Erneuern von Textbausteinen beim Deinstallieren/Aktivieren</label>
-            <defaultValue>true</defaultValue>
+            <name>demoCreateSalesChannel</name>
+            <label>Create a new sales channel for demo content (if no sales channel selected)</label>
+            <label lang="de-DE">einen neuen Verkaufskanal für Demo-Inhalte erstellen (wenn kein Verkaufskanal ausgewählt wurde)</label>
+            <defaultValue>false</defaultValue>
         </input-field>
     </card>
 
     <card>
         <title>Compatibility</title>
         <title lang="de-DE">Kompatibilität</title>
+
+        <input-field type="bool">
+            <name>cmpSectionFixedBackgroundIOS</name>
+            <label>Fixed CMS section background image for iOS</label>
+            <label lang="de-DE">Fixiertes Hintergrundbild eines CMS Abschnitts für iOS</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>cmpCustomerGroupCacheKeyGenerator</name>
+            <label>Enable cache fix</label>
+            <label lang="de-DE">Cache Fix aktivieren</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
 
         <input-field type="bool">
             <name>cmpElasticSearchMappings</name>
@@ -549,6 +557,15 @@
             <label>Disable filter panel polyfill</label>
             <label lang="de-DE">Filterfeld-Polyfill abschalten</label>
             <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>cmpGridElementWrapper</name>
+            <label>Fix display errors in CMS grid blocks</label>
+            <label lang="de-DE">Behebung von Anzeigefehlern in CMS-Grid-Blöcken</label>
+            <helpText>An additional DIV element is added to eliminate display errors in grid blocks.</helpText>
+            <helpText lang="de-DE">Um Anzeigefehler in Grid Blöcken zu beheben, wird ein zusätzliches DIV-Element eingebaut.</helpText>
+            <defaultValue>true</defaultValue>
         </input-field>
     </card>
 </config>

@@ -1,4 +1,7 @@
 {
+    "moorl-multi-banner": {
+        "missingMetaData": "This image has no width/height meta data"
+    },
     "moorl-hero-banner": {
         "missingCategory": "Missing category id. Please check the CMS element configuration!"
     },
@@ -25,6 +28,7 @@
         },
         "listing": {
             "filter": {
+                "persist": "Remember filter",
                 "productStream": "Product stream",
                 "firstChar": "Index",
                 "tags": "Tags",
@@ -38,7 +42,10 @@
                 "distance": "Distance",
                 "myLocation": "Use my location",
                 "categories": "Categories",
-                "navigation": "Categories"
+                "navigation": "Categories",
+                "nearbyFilterEnabled": "Your nearby filter is enabled. Your shown results are next to you (distanceKM of location).",
+                "nearbyFilterDisabled": "Your nearby filter is disabled.",
+                "nearbyFilterReset": "Reset"
             }
         },
         "customerUpload": {
@@ -65,7 +72,7 @@
             "saturday": "Saturday",
             "sunday": "Sunday"
         },
-        "buttons": {
+        "button": {
             "acceptCookie": "Accept cookie",
             "placeIdLink": "Plan route",
             "administrationButtonText": "Administration",
@@ -93,7 +100,12 @@
             "share": "Share",
             "toc": "Table of contents"
         },
-        "properties": {
+        "field": {
+            "product": "Product",
+            "unitPrice": "Unit price",
+            "subtotal": "Subtotal",
+            "quantity": "Quantity",
+            "qty": "QTY",
             "inRadiusOf": "in radius of",
             "radius": "Radius",
             "distance": "Distance",

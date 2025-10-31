@@ -2,21 +2,30 @@
 
 namespace MoorlFoundation\Core\Service;
 
-use Doctrine\DBAL\Driver\PDO\Exception;
-use League\Flysystem\Filesystem;
-use MoorlFoundation\Core\System\DataInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use Shopware\Core\Content\MailTemplate\MailTemplateActions;
+use League\Flysystem\Filesystem;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
+use MoorlFoundation\Core\System\DataInterface;
+use Shopware\Core\Content\Flow\Dispatching\Action\SendMailAction;
+use Shopware\Core\Content\ImportExport\ImportExportProfileDefinition;
 use Shopware\Core\Content\Media\File\FileSaver;
 use Shopware\Core\Content\Media\File\MediaFile;
 use Shopware\Core\Content\Media\MediaService;
+use Shopware\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
+use Shopware\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionDefinition;
+use Shopware\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionEntity;
+use Shopware\Core\Content\Property\PropertyGroupCollection;
+use Shopware\Core\Content\Property\PropertyGroupDefinition;
 use Shopware\Core\Defaults;
+use Shopware\Core\Framework\Adapter\Console\ShopwareStyle;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -35,7 +44,9 @@ class DataService
     private readonly string $demoCustomerMail;
     private ?string $customerId = null;
     private array $mediaCache = [];
+    private ?PropertyGroupCollection $propertyGroups = null;
     private EntityCollection $taxes;
+    private ?ShopwareStyle $io = null;
 
     /**
      * @param DataInterface[] $dataObjects
@@ -63,26 +74,6 @@ class DataService
         $this->demoCustomerMail = $systemConfigService->get('MoorlFoundation.config.demoCustomerMail') ?: 'test@example.com';
     }
 
-    public function getSalesChannelId(): ?string
-    {
-        return $this->salesChannelId;
-    }
-
-    public function setSalesChannelId(?string $salesChannelId): void
-    {
-        $this->salesChannelId = $salesChannelId;
-    }
-
-    public function getCustomerId(): ?string
-    {
-        return $this->customerId;
-    }
-
-    public function setCustomerId(?string $customerId): void
-    {
-        $this->customerId = $customerId;
-    }
-
     public function getOptions(string $type = 'demo'): array
     {
         $options = [];
@@ -99,44 +90,27 @@ class DataService
         return $options;
     }
 
-    public function getOptionsByPluginName(string $pluginName, string $type = 'demo'): array
+    public function install(string $pluginName, string $type = 'data', ?string $name = null): int
     {
-        $options = [];
-
-        foreach ($this->dataObjects as $dataObject) {
-            if ($pluginName !== $dataObject->getPluginName()) {
-                continue;
-            }
-            if ($dataObject->getType() !== $type) {
-                continue;
-            }
-
-            $options[] = $dataObject->getName();
-        }
-
-        return $options;
-    }
-
-    public function install(string $pluginName, string $type = 'data', ?string $name = null): void
-    {
+        $counter = 0;
         $this->initTaxes();
 
         foreach ($this->dataObjects as $dataObject) {
             if ($pluginName !== $dataObject->getPluginName()) {
                 continue;
             }
-
             if ($dataObject->getType() !== $type) {
                 continue;
             }
-
             if ($name && $name !== $dataObject->getName()) {
                 continue;
             }
-
-            if (!$name && $this->hasMigration($dataObject)) {
+            if (!$name && EntityDefinitionQueryHelper::migrationExists($this->connection, $dataObject::class)) {
+                $this->log("--- already has been migrated " . $dataObject::class);
                 continue;
             }
+
+            $this->log("Installing " . $dataObject::class);
 
             $this->initGlobalReplacers($dataObject);
 
@@ -162,7 +136,7 @@ class DataService
 
             $dataObject->process();
 
-            $this->addMigration($dataObject);
+            EntityDefinitionQueryHelper::addMigration($this->connection, $dataObject::class);
 
             if ($this->themeId && $this->salesChannelId) {
                 $this->themeService->compileTheme(
@@ -171,36 +145,48 @@ class DataService
                     $this->context
                 );
             }
+
+            $counter++;
         }
+
+        return $counter;
     }
 
-    public function addMigration(DataInterface $dataObject): void
+    public function remove(string $pluginName, string $type = 'data', ?string $name = null): int
     {
-        $sql = <<<SQL
-INSERT INTO `migration` (`class`, `creation_timestamp`, `update`, `message`)
-VALUES  (:class, :creation_timestamp, NOW(), :message)
-ON DUPLICATE KEY UPDATE `update` = NOW();
-SQL;
-        $this->connection->executeStatement(
-            $sql,
-            [
-                'class' => $dataObject::class,
-                'creation_timestamp' => time(),
-                'message' => 'written by moori Foundation'
-            ]
-        );
-    }
+        $counter = 0;
 
-    public function hasMigration(DataInterface $dataObject): bool
-    {
-        $sql = sprintf("SELECT * FROM `migration` WHERE `class` = '%s';", str_ireplace('\\', '\\\\', $dataObject::class));
-        return ($this->connection->executeQuery($sql)->rowCount() > 0);
-    }
+        foreach ($this->dataObjects as $dataObject) {
+            if (!$dataObject->isCleanUp()) {
+                continue;
+            }
+            if ($pluginName !== $dataObject->getPluginName()) {
+                continue;
+            }
+            if ($type && $dataObject->getType() !== $type) {
+                continue;
+            }
+            if ($name && $name !== $dataObject->getName()) {
+                continue;
+            }
 
-    public function removeMigration(DataInterface $dataObject): void
-    {
-        $sql = sprintf("DELETE FROM `migration` WHERE `class` = '%s';", str_ireplace('\\', '\\\\', $dataObject::class));
-        $this->connection->executeQuery($sql);
+            $this->log("Uninstalling " . $dataObject::class);
+
+            $this->initGlobalReplacers($dataObject);
+            $this->cleanUpPluginTables($dataObject);
+            $this->cleanUpShopwareTables($dataObject);
+
+            foreach ($dataObject->getRemoveQueries() as $sql) {
+                $sql = $this->processReplace($sql, $dataObject);
+                $this->connection->executeStatement($sql);
+            }
+
+            EntityDefinitionQueryHelper::removeMigration($this->connection, $dataObject::class);
+
+            $counter++;
+        }
+
+        return $counter;
     }
 
     public function getTargetDir(DataInterface $dataObject, bool $isBundle = false): string
@@ -286,7 +272,7 @@ TWIG;
             '{LANGUAGE_ID}' => Defaults::LANGUAGE_SYSTEM,
             '{CURRENCY_ID}' => Defaults::CURRENCY,
             '{VERSION_ID}' => Defaults::LIVE_VERSION,
-            '{MAIL_TEMPLATE_MAIL_SEND_ACTION}' => MailTemplateActions::MAIL_TEMPLATE_MAIL_SEND_ACTION,
+            '{MAIL_TEMPLATE_MAIL_SEND_ACTION}' => SendMailAction::ACTION_NAME,
             '{LOREM_IPSUM_50}' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
         ];
 
@@ -378,7 +364,8 @@ SQL;
             $query = $this->connection->executeQuery($sql)->fetchAssociative();
             $globalReplacers['{SALES_CHANNEL_ID}'] = $query['id'];
             $globalReplacers['{NAVIGATION_CATEGORY_ID}'] = $query['categoryId'];
-        } catch (\Exception) {
+        } catch (\Exception $exception) {
+            $this->log("Unable to set SALES_CHANNEL_ID and NAVIGATION_CATEGORY_ID " . $exception->getMessage(), "error");
         }
 
         /**
@@ -407,13 +394,22 @@ SQL;
 
             $repository = $this->definitionInstanceRegistry->getRepository($table);
 
+            $this->log(sprintf("Inserting data into table '%s'", $table));
+
             try {
                 $repository->upsert($data, $this->context);
-            } catch (\Exception $exception) {
-                throw new Exception(sprintf("Table: %s %s %s",
-                    $table,
-                    $exception->getMessage(),
-                    json_encode($data)));
+            } catch (Exception $exception) {
+                $this->log($exception->getMessage(), "error");
+
+                EntityDefinitionQueryHelper::handleDbalException(
+                    exception: $exception,
+                    connection: $this->connection,
+                    table: $table,
+                    codes: [1451],
+                    ids: array_map(fn($row) => $row['id'], $data)
+                );
+
+                $repository->upsert($data, $this->context);
             }
         }
     }
@@ -423,6 +419,17 @@ SQL;
         $content = strtr($content, $dataObject->getGlobalReplacers());
         $globalReplacers = $dataObject->getGlobalReplacers();
 
+        // Find and replace constants
+        preg_match_all('/([A-Za-z_\\\\][A-Za-z0-9_\\\\]*::[A-Z0-9_]+)/', $content, $matches);
+        if (!empty($matches[1])) {
+            foreach ($matches[1] as $search) {
+                $constant = preg_replace('/\\\\+/', '\\', $search);
+                if (!defined($constant)) {
+                    throw new \RuntimeException(sprintf("Constant '%s' not found", $constant));
+                }
+                $content = str_replace($search, constant($constant), $content);
+            }
+        }
         /* Make unique IDs */
         preg_match_all('/{ID:([^}]+)}/', $content, $matches);
         if (!empty($matches[1]) && is_array($matches[1])) {
@@ -622,6 +629,9 @@ SQL;
                     }
                 }
             }
+            if ($table === 'product' && !empty($item['configuratorSettings']) && empty($item['children'])) {
+                $item['children'] = $this->generateVariants($item);
+            }
             /**
              * @deprecated tag:v6.5
              */
@@ -633,6 +643,9 @@ SQL;
             }
             if (isset($item['_skipEnrichData'])) {
                 unset($item['_skipEnrichData']);
+                continue;
+            }
+            if ($table === ImportExportProfileDefinition::ENTITY_NAME) {
                 continue;
             }
             /**
@@ -671,7 +684,9 @@ SQL;
                 ];
             }
             if (!isset($item['createdAt'])) {
-                $item['createdAt'] = $dataObject->getCreatedAt();
+                if (count($item) !== 1) {
+                    $item['createdAt'] = $dataObject->getCreatedAt();
+                }
             }
 
             $this->enrichFallbackData($item, $table, $dataObject);
@@ -681,10 +696,132 @@ SQL;
                 if ($table === 'cms_page' && $key === 'customFields') {
                     continue;
                 }
+                if ($table === 'custom_field_set' && $key === 'config') {
+                    continue;
+                }
+                if ($table === 'flow' && $key === 'config') {
+                    continue;
+                }
 
                 $this->enrichData($value, $table, $dataObject);
             }
         }
+    }
+
+    public function generateVariants(array $item): array
+    {
+        $children = [];
+        $basePN = $item['productNumber'] ?? null;
+        $price = $item['price'] ?? null;
+        if (!$basePN || !$price) {
+            return $children;
+        }
+
+        $stock = $item['stock'] ?? 1;
+
+        $optionIds = [];
+        $optionPrices = [];
+        foreach ($item['configuratorSettings'] as $configuratorSetting) {
+            $optionId = $configuratorSetting['optionId'];
+            $optionIds[] = $optionId;
+            if (isset($configuratorSetting['_price'])) {
+                $optionPrices[$optionId] = (float)$configuratorSetting['_price'];
+            }
+        }
+
+        $optionIds = array_values(array_filter(array_unique($optionIds)));
+        if (empty($optionIds)) {
+            return $children;
+        }
+
+        $criteria = (new Criteria())
+            ->addFilter(new EqualsAnyFilter('id', $optionIds))
+            ->addAssociation('group');
+
+        $repo = $this->definitionInstanceRegistry->getRepository(PropertyGroupOptionDefinition::ENTITY_NAME);
+
+        /** @var PropertyGroupOptionCollection $options */
+        $options = $repo->search($criteria, $this->context)->getEntities();
+        if ($options->count() === 0) {
+            return $children;
+        }
+
+        $byGroup = [];
+        foreach ($options as $opt) {
+            /** @var PropertyGroupOptionEntity $opt */
+            $group = $opt->getGroup();
+            if (!$group) {
+                continue;
+            }
+            $gid = $group->getId();
+            $byGroup[$gid]['groupName'] = (string) $group->getName();
+            $byGroup[$gid]['options'][] = $opt;
+        }
+
+        uasort($byGroup, static function ($a, $b): int {
+            return strcmp($a['groupName'] ?? '', $b['groupName'] ?? '');
+        });
+
+        $sets = array_map(fn ($g) => $g['options'], $byGroup);
+        $combinations = self::cartesianProduct($sets);
+
+
+        /* @var PropertyGroupOptionEntity $combo */
+        foreach ($combinations as $index => $combo) {
+            $optionIdsForChild = [];
+            $optionNameParts = [$basePN, $index];
+
+            $priceFactor = 1;
+            foreach ($combo as $opt) {
+                $optionIdsForChild[] = ['id' => $opt->getId()];
+
+                if (isset($optionPrices[$opt->getId()])) {
+                    $priceFactor = $priceFactor * ($optionPrices[$opt->getId()] / 100);
+                }
+            }
+
+            $optionPrice = $price[0];
+            $optionPrice['net'] = $priceFactor * $optionPrice['net'];
+            $optionPrice['gross'] = $priceFactor * $optionPrice['gross'];
+
+            $productNumber = implode('.', $optionNameParts);
+            $children[] = [
+                'id' => md5($productNumber),
+                'options' => $optionIdsForChild,
+                'productNumber' => $productNumber,
+                'stock' => $stock,
+                'price' => [$optionPrice],
+            ];
+        }
+
+        return $children;
+    }
+
+    /**
+     * @param array<int, PropertyGroupOptionEntity[]> $sets
+     * @return array<int, PropertyGroupOptionEntity[]>
+     */
+    private static function cartesianProduct(array $sets): array
+    {
+        if (empty($sets)) {
+            return [];
+        }
+
+        $result = [[]];
+
+        foreach ($sets as $set) {
+            $next = [];
+            foreach ($result as $prefix) {
+                foreach ($set as $elem) {
+                    $tmp = $prefix;
+                    $tmp[] = $elem;
+                    $next[] = $tmp;
+                }
+            }
+            $result = $next;
+        }
+
+        return $result;
     }
 
     public function fetchFileFromURL(string $url, string $extension): MediaFile
@@ -855,38 +992,6 @@ SQL;
         ];
     }
 
-    public function remove(string $pluginName, string $type = 'data', ?string $name = null): void
-    {
-        foreach ($this->dataObjects as $dataObject) {
-            if (!$dataObject->isCleanUp()) {
-                continue;
-            }
-
-            if ($pluginName !== $dataObject->getPluginName()) {
-                continue;
-            }
-
-            if ($type && $dataObject->getType() !== $type) {
-                continue;
-            }
-
-            if ($name && $name !== $dataObject->getName()) {
-                continue;
-            }
-
-            $this->initGlobalReplacers($dataObject);
-            $this->cleanUpPluginTables($dataObject);
-            $this->cleanUpShopwareTables($dataObject);
-
-            foreach ($dataObject->getRemoveQueries() as $sql) {
-                $sql = $this->processReplace($sql, $dataObject);
-                $this->connection->executeStatement($sql);
-            }
-
-            $this->removeMigration($dataObject);
-        }
-    }
-
     public function cleanUpPluginTables(DataInterface $dataObject): void
     {
         if (!$dataObject->getPluginTables()) {
@@ -903,11 +1008,8 @@ SQL;
                 $table,
                 $dataObject->getCreatedAt()
             );
-            try {
-                $this->connection->executeStatement($sql);
-            } catch (\Exception) {
-                continue;
-            }
+
+            $this->connection->executeStatement($sql);
         }
     }
 
@@ -927,11 +1029,8 @@ SQL;
                 $table,
                 $dataObject->getCreatedAt()
             );
-            try {
-                $this->connection->executeStatement($sql);
-            } catch (\Exception) {
-                continue;
-            }
+
+            $this->connection->executeStatement($sql);
         }
     }
 
@@ -940,15 +1039,42 @@ SQL;
         return file_exists(sprintf('%s/content/%s.json', $dataObject->getPath(), $table));
     }
 
-    public function dropTables(DataInterface $dataObject): void
+    private function log(string|\Stringable $message, $level = 'text', array $context = []): void
     {
-        if (!$dataObject->getPluginTables()) {
+        if (!$this->io instanceof ShopwareStyle) {
             return;
         }
+        array_unshift($context, $message);
 
-        foreach ($dataObject->getPluginTables() as $table) {
-            $sql = sprintf('SET FOREIGN_KEY_CHECKS=0; DROP TABLE IF EXISTS `%s`;', $table);
-            $this->connection->executeStatement($sql);
+        if (method_exists($this->io, $level)) {
+            $this->io->{$level}($context);
+        } else {
+            $this->io->info($context);
         }
+    }
+
+    public function setIo(?ShopwareStyle $io): void
+    {
+        $this->io = $io;
+    }
+
+    public function getSalesChannelId(): ?string
+    {
+        return $this->salesChannelId;
+    }
+
+    public function setSalesChannelId(?string $salesChannelId): void
+    {
+        $this->salesChannelId = $salesChannelId;
+    }
+
+    public function getCustomerId(): ?string
+    {
+        return $this->customerId;
+    }
+
+    public function setCustomerId(?string $customerId): void
+    {
+        $this->customerId = $customerId;
     }
 }

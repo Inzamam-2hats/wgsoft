@@ -2,6 +2,7 @@
 
 namespace MoorlFoundation\Core\Framework\DataAbstractionLayer\Indexer\EntityStock;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
@@ -29,10 +30,9 @@ use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\StateMachine\Event\StateMachineTransitionEvent;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
 class EntityStockUpdater implements EventSubscriberInterface
 {
-    protected string $propertyNamePlural;
+    protected string $propertyNamePlural = "";
 
     public function __construct(
         protected Connection $connection,
@@ -129,7 +129,7 @@ class EntityStockUpdater implements EventSubscriberInterface
                 continue;
             }
             /** @var ChangeSetAware|InsertCommand|UpdateCommand $command */
-            if ($command->getDefinition()->getEntityName() !== OrderLineItemDefinition::ENTITY_NAME) {
+            if ($command->getEntityName() !== OrderLineItemDefinition::ENTITY_NAME) {
                 continue;
             }
             if ($command instanceof DeleteCommand) {
@@ -248,7 +248,7 @@ SQL;
                 'ids' => Uuid::fromHexToBytesList($entityStockIds),
             ],
             [
-                'ids' => Connection::PARAM_STR_ARRAY,
+                'ids' => ArrayParameterType::STRING,
             ]
         );
 
@@ -323,11 +323,11 @@ SQL;
     private function getLineItemsOfOrder(string $orderId): array
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select([
+        $query->select(
             'referenced_id',
             'quantity',
             sprintf('LOWER(HEX(%s)) AS entity_stock_id', $this->propertyName)
-        ]);
+        );
         $query->from('order_line_item');
         $query->andWhere('type = :type');
         $query->andWhere('order_id = :id');
@@ -337,7 +337,7 @@ SQL;
         $query->setParameter('version', Uuid::fromHexToBytes(Defaults::LIVE_VERSION));
         $query->setParameter('type', LineItem::PRODUCT_LINE_ITEM_TYPE);
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
     private function getEntityStockIdByLineItemId(string $lineItemId, Context $context): ?string

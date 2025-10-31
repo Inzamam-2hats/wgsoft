@@ -9,12 +9,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand('moorl-foundation:entity-auto-cache')]
+#[AsCommand('moorl:entity-auto-cache')]
 class EntityAutoCacheCommand extends Command
 {
     public function __construct(private readonly EntityAutoCacheService $entityAutoCacheService,)
     {
-        parent::__construct('moorl-foundation:entity-auto-cache');
+        parent::__construct();
     }
 
     protected function configure(): void

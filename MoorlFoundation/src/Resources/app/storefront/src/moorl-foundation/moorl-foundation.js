@@ -1,4 +1,4 @@
-import Plugin from 'src/plugin-system/plugin.class';
+const Plugin = window.PluginBaseClass;
 import HttpClient from 'src/service/http-client.service';
 
 export default class MoorlFoundation extends Plugin {
@@ -13,6 +13,11 @@ export default class MoorlFoundation extends Plugin {
 
         /* @deprecated: Use data-moorl-modal as future selector */
         const buttons = document.querySelectorAll('[data-moorl-foundation-modal]');
+
+        if (buttons.length === 0) {
+            return;
+        }
+
         const modal = document.getElementById('moorlFoundationModal');
         buttons.forEach((button) => {
             button.addEventListener('click', () => {
@@ -25,21 +30,22 @@ export default class MoorlFoundation extends Plugin {
         });
 
         modal.addEventListener('hidden.bs.modal', () => {
-            modal.innerHTML = "";
+            modal.innerHTML = '';
         });
 
         window.moorlFoundationModal = function (url, callback) {
             that._client.get(url, (response) => {
                 that._openModal(response, callback);
             });
-        }
+        };
     }
 
     _openModal(response, callback) {
         const modal = document.getElementById('moorlFoundationModal');
         modal.innerHTML = response;
 
-        const bsModal = bootstrap.Modal.getInstance(modal) ?? new bootstrap.Modal(modal);
+        const bsModal =
+            bootstrap.Modal.getInstance(modal) ?? new bootstrap.Modal(modal);
         bsModal.show();
 
         window.PluginManager.initializePlugins();

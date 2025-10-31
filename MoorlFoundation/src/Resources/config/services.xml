@@ -4,14 +4,18 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <imports>
-        <import resource="entity-auto-cache.xml"/>
-        <import resource="location.xml"/>
-        <import resource="controllers.xml"/>
+        <import resource="core/entity-auto-cache.xml"/>
+        <import resource="core/entity-auto-location.xml"/>
+        <import resource="administration/controllers.xml"/>
+        <import resource="storefront/cms-element-resolver.xml"/>
+        <import resource="storefront/controllers.xml"/>
+        <import resource="core/location.xml"/>
         <import resource="subscribers.xml"/>
-        <import resource="data.xml"/>
-        <import resource="client.xml"/>
-        <import resource="entity-translation.xml"/>
-        <import resource="cms-element-resolver.xml"/>
+        <import resource="core/data.xml"/>
+        <import resource="core/client.xml"/>
+        <import resource="core/entity-translation.xml"/>
+        <import resource="core/embedded-media.xml"/>
+        <import resource="core/validator.xml"/>
     </imports>
 
     <services>
@@ -142,6 +146,23 @@
         <!-- Core\Framework\DAL -->
         <service id="MoorlFoundation\Core\Framework\DataAbstractionLayer\MoorlFoundationExceptionHandler">
             <tag name="shopware.dal.exception_handler"/>
+        </service>
+
+        <service id="MoorlFoundation\Core\Framework\DataAbstractionLayer\Cache\CustomerGroupCacheKeyGenerator"
+                 decorates="Shopware\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator"
+                 public="true">
+            <argument type="service" id="MoorlFoundation\Core\Framework\DataAbstractionLayer\Cache\CustomerGroupCacheKeyGenerator.inner"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
+        </service>
+
+        <service id="MoorlFoundation\Core\Framework\DataAbstractionLayer\FieldSerializer\IbanFieldSerializer"
+                 parent="Shopware\Core\Framework\DataAbstractionLayer\FieldSerializer\StringFieldSerializer">
+            <tag name="shopware.field_serializer"/>
+        </service>
+
+        <service id="MoorlFoundation\Core\Framework\DataAbstractionLayer\FieldSerializer\BicFieldSerializer"
+                 parent="Shopware\Core\Framework\DataAbstractionLayer\FieldSerializer\StringFieldSerializer">
+            <tag name="shopware.field_serializer"/>
         </service>
     </services>
 </container>

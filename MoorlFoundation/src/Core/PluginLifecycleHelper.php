@@ -2,53 +2,44 @@
 
 namespace MoorlFoundation\Core;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use MoorlFoundation\Core\Service\DataService;
-use Shopware\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
+use Shopware\Core\Framework\Bundle;
+use Shopware\Core\Framework\Migration\MigrationStep;
 use Shopware\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Loader\DelegatingLoader;
-use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
-use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Filesystem\Filesystem;
 
 class PluginLifecycleHelper
 {
+    public static function removeDir(ContainerInterface $container, string|array $paths = []): void
+    {
+        $rootDir = $container->getParameter('kernel.project_dir');
+        if (!is_array($paths)) {
+            $paths = [$paths];
+        }
+        foreach ($paths as $path) {
+            $filesystem = new Filesystem();
+            $dir = $rootDir . '/' . $path;
+            if ($filesystem->exists($dir)) {
+                $filesystem->remove($dir);
+            }
+        }
+    }
+
     public static function build(ContainerBuilder $container, string|array $paths = []): void
     {
         if (class_exists(AbstractElasticsearchDefinition::class)) {
             $loader = new XmlFileLoader($container, new FileLocator($paths));
             $loader->load('services.xml');
         }
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param string $path
-     * @return void
-     * @throws \Exception
-     *
-     * Copy from: https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/logging.html
-     */
-    public static function loadYaml(ContainerBuilder $container, string $path): void
-    {
-        $locator = new FileLocator('Resources/config');
-
-        $resolver = new LoaderResolver([
-            new YamlFileLoader($container, $locator),
-            new GlobFileLoader($container, $locator),
-            new DirectoryLoader($container, $locator),
-        ]);
-
-        $configLoader = new DelegatingLoader($resolver);
-
-        $confDir = \rtrim($path, '/') . '/Resources/config';
-
-        $configLoader->load($confDir . '/{packages}/*.yaml', 'glob');
     }
 
     public static function update(string $plugin, ContainerInterface $container): void
@@ -90,9 +81,51 @@ class PluginLifecycleHelper
                 /* @var $dataService DataService */
                 $dataService = $container->get(DataService::class);
                 $dataService->remove(self::c($plugin, 'NAME'));
-            } catch (\Exception) {
+            } catch (ServiceNotFoundException) {
             }
         }
+
+        self::removeMigrations($connection, $plugin);
+    }
+
+    public static function migrationSkipper(Bundle $bundle, int $timestamp, ContainerInterface $container): void
+    {
+        $connection = $container->get(Connection::class);
+
+        $classFiles = scandir($bundle->getMigrationPath(), \SCANDIR_SORT_ASCENDING);
+
+        if ($classFiles) {
+            $namespace = $bundle->getMigrationNamespace();
+
+            foreach ($classFiles as $classFileName) {
+                $path = sprintf("%s/%s", $bundle->getMigrationPath(), $classFileName);
+                if (pathinfo($path, \PATHINFO_EXTENSION) !== 'php') {continue;}
+
+                $className = $namespace . '\\' . pathinfo($classFileName, \PATHINFO_FILENAME);
+                if (!is_subclass_of($className, MigrationStep::class)) {continue;}
+
+                if (preg_match('/Migration(\d{10})/', $classFileName, $matches)) {
+                    $migrationTimestamp = (int)$matches[1];
+                } else {
+                    throw new \Exception('Invalid migration step: ' . $classFileName);
+                }
+
+                if ($migrationTimestamp < $timestamp) {
+                    EntityDefinitionQueryHelper::addMigration(
+                        $connection,
+                        $className,
+                        "migration skipped"
+                    );
+                }
+            }
+        }
+    }
+
+    public static function removeMigrations(Connection $connection, string $plugin): void
+    {
+        $class = new \ReflectionClass($plugin);
+        $class = addcslashes($class->getNamespaceName(), '\\_%') . '%';
+        $connection->executeStatement('DELETE FROM migration WHERE class LIKE :class', ['class' => $class]);
     }
 
     public static function updateInheritance(Connection $connection, string $table, string $propertyName): void
@@ -135,23 +168,107 @@ class PluginLifecycleHelper
 
     public static function removePluginTables(Connection $connection, array $pluginTables): void
     {
+        self::removeForeignKeys($connection, $pluginTables);
+
         foreach (array_reverse($pluginTables) as $table) {
             $sql = sprintf('DROP TABLE IF EXISTS `%s`;', $table);
             $connection->executeStatement($sql);
         }
     }
 
+    public static function removeForeignKeys(Connection $connection, array $pluginTables): void
+    {
+        foreach (array_reverse($pluginTables) as $table) {
+            $foreignKeys = $connection->fetchAllAssociative(
+                "SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table AND CONSTRAINT_TYPE = 'FOREIGN KEY'",
+                ['table' => $table]
+            );
+
+            foreach ($foreignKeys as $fk) {
+                $constraint = $fk['CONSTRAINT_NAME'];
+                $sql = sprintf("ALTER TABLE `%s` DROP FOREIGN KEY `%s`;", $table, $constraint);
+                $connection->executeStatement($sql);
+            }
+        }
+    }
+
     public static function removePluginData(Connection $connection, array $shopwareTables, string $createdAt): void
     {
         foreach (array_reverse($shopwareTables) as $table) {
+            if (
+                !EntityDefinitionQueryHelper::tableExists($connection, $table) ||
+                !EntityDefinitionQueryHelper::columnExists($connection, $table, 'created_at')
+            ) {continue;}
+
+            $ids = [];
+            if (EntityDefinitionQueryHelper::columnExists($connection, $table, 'id')) {
+                $sql = sprintf("SELECT HEX(`id`) as id FROM `%s` WHERE `created_at` = '%s';", $table, $createdAt);
+                $ids = $connection->fetchFirstColumn($sql);
+            }
+
             $sql = sprintf("DELETE FROM `%s` WHERE `created_at` = '%s';", $table, $createdAt);
 
-            try {
-                $connection->executeStatement($sql);
-            } catch (\Exception) {
-                continue;
-            }
+            EntityDefinitionQueryHelper::tryExecuteStatement(
+                connection: $connection,
+                sql: $sql,
+                table: $table,
+                codes: [1451],
+                ids: $ids
+            );
         }
+    }
+
+    public static function renameCmsBlock(
+        Connection $connection,
+        string $oldType,
+        string $newType = 'moorl-column-layout-1',
+        array $slotMapping = [
+            'one' => 'slot-a',
+            'two' => 'slot-b',
+            'three' => 'slot-c',
+            'four' => 'slot-d',
+            'content' => 'slot-a',
+            'left' => 'slot-a',
+            'right' => 'slot-c',
+            'center' => 'slot-b',
+        ]
+    ): void
+    {
+        $blockIds = $connection->fetchFirstColumn(
+            'SELECT `id` FROM `cms_block` WHERE `type` = :oldType',
+            ['oldType' => $oldType],
+            ['oldType' => ParameterType::STRING]
+        );
+        if (empty($blockIds)) {
+            return;
+        }
+
+        foreach ($slotMapping as $oldSlot => $newSlot) {
+            $connection->executeStatement(
+                'UPDATE `cms_slot` SET `slot` = :newSlot WHERE `cms_block_id` IN (:blockIds) AND `slot` = :oldSlot',
+                ['newSlot' => $newSlot, 'blockIds' => $blockIds, 'oldSlot' => $oldSlot],
+                ['newSlot' => ParameterType::STRING, 'blockIds' => ArrayParameterType::BINARY, 'oldSlot' => ParameterType::STRING]
+            );
+        }
+
+        $connection->executeStatement(
+            'UPDATE `cms_block` SET `type` = :newType WHERE `id` IN (:blockIds) AND `type` = :oldType',
+            ['newType' => $newType, 'blockIds' => $blockIds, 'oldType' => $oldType],
+            ['newType' => ParameterType::STRING, 'blockIds' => ArrayParameterType::BINARY, 'oldType' => ParameterType::STRING]
+        );
+    }
+
+    public static function renameCmsSlot(
+        Connection $connection,
+        string $oldType,
+        string $newType,
+    ): void
+    {
+        $connection->executeStatement(
+            'UPDATE `cms_slot` SET `type` = :newType WHERE `type` = :oldType',
+            ['newType' => $newType, 'oldType' => $oldType],
+            ['newType' => ParameterType::STRING, 'oldType' => ParameterType::STRING]
+        );
     }
 
     private static function c(string $plugin, string $constant): mixed

@@ -1,10 +1,10 @@
-import Plugin from 'src/plugin-system/plugin.class';
+const Plugin = window.PluginBaseClass;
 import TomSelect from 'tom-select';
 
 export default class MoorlSelectSearchPlugin extends Plugin {
     static options = {
         desktop: true,
-        mobile: false
+        mobile: false,
     };
 
     init() {
